@@ -42,7 +42,7 @@ const styles = {
 export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Paper style={styles.paperContainer} sx={{height: "100vh", paddingTop: "15px"}} elevation={0}>
+      <Paper style={styles.paperContainer} sx={{height: "90vh", paddingTop: "15px"}} elevation={0}>
       <AppBar position="static" color='transparent' elevation={0}>
         <img style={styles.icon} src={logo} alt='logo'></img>
         <Toolbar>
@@ -59,7 +59,7 @@ export default function ButtonAppBar() {
               <Typography component="div" sx={{ flexGrow: 1 }} fontSize={30} fontWeight={'bold'}>
                 CourseOwl
               </Typography>
-              <Button color="inherit">Log In</Button>
+              <button className='button-54' role='button'>Log In</button>
           </ThemeProvider>
         </Toolbar>
       </AppBar>
@@ -77,6 +77,11 @@ export default function ButtonAppBar() {
         </Container>
       </ThemeProvider>
       </Box>
+      
+      <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '30px' }}>
+        <button className='button-54' role='button'>Learn More</button>
+      </Container>
+      
       </Paper>
     </Box>
   );
