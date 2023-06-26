@@ -3,15 +3,18 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Paper, createTheme } from '@mui/material';
-import { ThemeProvider } from '@emotion/react';
+import { ThemeContext, ThemeProvider } from '@emotion/react';
 import Image from '../assets/home51.jpg'
 import logo from '../assets/owl.png'
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
+import schedule from '../assets/appointment.png'
+import grades from '../assets/score.png'
+import chat from '../assets/consultation.png'
+import review from '../assets/like.png'
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -28,14 +31,15 @@ const styles = {
         backgroundPosition: 'center'
     },
     icon: {
-//      display: 'block',
       margin: 'auto',
       width: '35px',
       top: '30px',
       left: '0',
       right: '0',
-//      bottom: '0',
       position: 'absolute'
+    },
+    features: {
+      width: '10vw'
     }
 };
 
@@ -59,14 +63,14 @@ export default function ButtonAppBar() {
               <Typography component="div" sx={{ flexGrow: 1 }} fontSize={30} fontWeight={'bold'}>
                 CourseOwl
               </Typography>
-              <button className='button-54' role='button'>Log In</button>
+              <button className='button-54'>Log In</button>
           </ThemeProvider>
         </Toolbar>
       </AppBar>
-      <Box paddingTop={'10vh'}>
+      <Box paddingTop={'13vh'}>
       <ThemeProvider theme={theme}>
         <Container maxWidth={'sm'}>
-        <Stack spacing={2}>
+        <Stack spacing={6}>
           <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
             Welcome, Students!
           </Typography>
@@ -78,10 +82,54 @@ export default function ButtonAppBar() {
       </ThemeProvider>
       </Box>
       
-      <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '30px' }}>
-        <button className='button-54' role='button'>Learn More</button>
+      <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
+        <button className='button-54'>Learn More</button>
       </Container>
       
+      </Paper>
+      <Paper sx={{ height: '90vh' }}>
+        <Stack paddingTop={'10vh'} spacing={'8vh'}>
+          <ThemeProvider theme={theme}>
+            <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
+              Grades? We've got you covered...
+            </Typography>
+          </ThemeProvider>
+          <Stack direction={'row'} spacing={'5vw'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '30px' }}>
+            <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
+              <img src={review} alt='review' style={styles.features}></img>
+              <ThemeProvider theme={theme}>
+                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                  Review Professors
+                </Typography>
+              </ThemeProvider>
+            </Stack>
+            <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
+              <img src={chat} alt='chat' style={styles.features}></img>           
+              <ThemeProvider theme={theme}>
+                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                  Connect With Peers
+                </Typography>
+              </ThemeProvider>
+            </Stack>
+            <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
+              <img src={grades} alt='grades' style={styles.features}></img>
+              <ThemeProvider theme={theme}>
+                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                  View Past Grades
+                </Typography>
+              </ThemeProvider>
+            </Stack>
+            <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
+              <img src={schedule} alt='schedule' style={styles.features}></img>           
+              <ThemeProvider theme={theme}>
+                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                  Build Your Schedule
+                </Typography>
+              </ThemeProvider>
+            </Stack>
+            
+          </Stack>
+        </Stack>
       </Paper>
     </Box>
   );
