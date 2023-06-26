@@ -44,7 +44,7 @@ export default function ButtonAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <Paper style={styles.paperContainer} sx={{height: "100vh", paddingTop: "15px"}} elevation={0}>
       <AppBar position="static" color='transparent' elevation={0}>
-        <img style={styles.icon} src={logo}></img>
+        <img style={styles.icon} src={logo} alt='logo'></img>
         <Toolbar>
           <IconButton
             size="large"
