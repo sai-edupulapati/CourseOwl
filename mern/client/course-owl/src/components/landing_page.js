@@ -15,6 +15,7 @@ import schedule from '../assets/chat2.png'
 import grades from '../assets/like3.png'
 import chat from '../assets/like4.png'
 import review from '../assets/like2.png'
+import ControlledAccordions from './faq_dropdown';
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -88,7 +89,7 @@ export default function ButtonAppBar() {
       
       </Paper>
       {/* <Paper sx={{ height: '100vh' }}> */}
-        <Stack paddingTop={'10vh'} spacing={'8vh'} display={'flex'} alignItems={'center'} justifyContent={'center'} paddingBottom={'5vh'}>
+        <Stack paddingTop={'10vh'} spacing={'8vh'} display={'flex'} alignItems={'center'} justifyContent={'center'} paddingBottom={'10vh'}>
           <ThemeProvider theme={theme}>
             <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
               Grades? We've got you covered...
@@ -152,7 +153,18 @@ export default function ButtonAppBar() {
           </Stack>
           <button className='button-54'>Join Us</button>
         </Stack>
-      {/* </Paper> */}
+        <Stack className='faq' height={'60vh'} paddingTop={'10vh'} spacing={2} display={'flex'} alignItems={'center'}>
+          <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'5vh'}>
+            <ThemeProvider theme={theme}>
+              <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
+                More About CourseOwl
+              </Typography>
+              <Container>
+                <ControlledAccordions></ControlledAccordions>
+              </Container>
+            </ThemeProvider>
+          </Stack>
+        </Stack>
     </Box>
   );
 }
