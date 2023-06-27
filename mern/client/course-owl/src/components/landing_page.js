@@ -11,10 +11,10 @@ import Image from '../assets/home51.jpg'
 import logo from '../assets/owl.png'
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import schedule from '../assets/appointment.png'
-import grades from '../assets/score.png'
-import chat from '../assets/consultation.png'
-import review from '../assets/like.png'
+import schedule from '../assets/chat2.png'
+import grades from '../assets/like3.png'
+import chat from '../assets/like4.png'
+import review from '../assets/like2.png'
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -87,8 +87,8 @@ export default function ButtonAppBar() {
       </Container>
       
       </Paper>
-      <Paper sx={{ height: '90vh' }}>
-        <Stack paddingTop={'10vh'} spacing={'8vh'}>
+      {/* <Paper sx={{ height: '100vh' }}> */}
+        <Stack paddingTop={'10vh'} spacing={'8vh'} display={'flex'} alignItems={'center'} justifyContent={'center'} paddingBottom={'5vh'}>
           <ThemeProvider theme={theme}>
             <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
               Grades? We've got you covered...
@@ -98,39 +98,61 @@ export default function ButtonAppBar() {
             <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
               <img src={review} alt='review' style={styles.features}></img>
               <ThemeProvider theme={theme}>
-                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
-                  Review Professors
-                </Typography>
+                <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'0.5vh'} width={'10vw'}>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                    Review Professors
+                  </Typography>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={15}>
+                    See what others have said about your future professors, and provide us with your own feedback!
+                  </Typography>
+                </Stack>
               </ThemeProvider>
             </Stack>
             <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
               <img src={chat} alt='chat' style={styles.features}></img>           
               <ThemeProvider theme={theme}>
-                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
-                  Connect With Peers
-                </Typography>
+                <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'0.5vh'} width={'10vw'}>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                    Connect With Peers
+                  </Typography>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={15}>
+                    CourseOwl has open chat rooms for every course being offered this current semester,
+                    sorted based on department.
+                  </Typography>
+                </Stack>
               </ThemeProvider>
             </Stack>
             <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
               <img src={grades} alt='grades' style={styles.features}></img>
               <ThemeProvider theme={theme}>
-                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
-                  View Past Grades
-                </Typography>
+                <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'0.5vh'} width={'10vw'}>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                    View Past Grades
+                  </Typography>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={15}>
+                    Check how the final grade distributions have been historically for the classes you want to take in the future.
+                  </Typography>
+                </Stack>
               </ThemeProvider>
             </Stack>
             <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'10vh'}>
               <img src={schedule} alt='schedule' style={styles.features}></img>           
               <ThemeProvider theme={theme}>
-                <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
-                  Build Your Schedule
-                </Typography>
+                <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'0.5vh'} width={'10vw'}>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={30} fontWeight={'bold'}>
+                    Build Your Schedule
+                  </Typography>
+                  <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={15}>
+                    Add classes you plan on taking this semester, and track classes based on availability of seats.
+                  </Typography>
+                </Stack>
               </ThemeProvider>
             </Stack>
             
           </Stack>
+          <button className='button-54'>Join Us</button>
         </Stack>
-      </Paper>
+      {/* </Paper> */}
     </Box>
   );
 }
