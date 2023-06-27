@@ -155,7 +155,7 @@ export default function ButtonAppBar() {
           </Stack>
           <button className='button-54'>Join Us</button>
         </Stack>
-        <Stack className='faq' height={'40vh'} paddingTop={'10vh'} spacing={2} display={'flex'} alignItems={'center'}>
+        <Stack className='faq' paddingTop={'10vh'} spacing={2} display={'flex'} alignItems={'center'} paddingBottom={'10vh'}>
           <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'5vh'}>
             <ThemeProvider theme={theme}>
               <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
