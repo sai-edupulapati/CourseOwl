@@ -16,6 +16,8 @@ import grades from '../assets/like3.png'
 import chat from '../assets/like4.png'
 import review from '../assets/like2.png'
 import ControlledAccordions from './faq_dropdown';
+import github from '../assets/github.png'
+import linkedin from '../assets/in.png'
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -153,7 +155,7 @@ export default function ButtonAppBar() {
           </Stack>
           <button className='button-54'>Join Us</button>
         </Stack>
-        <Stack className='faq' height={'60vh'} paddingTop={'10vh'} spacing={2} display={'flex'} alignItems={'center'}>
+        <Stack className='faq' height={'40vh'} paddingTop={'10vh'} spacing={2} display={'flex'} alignItems={'center'}>
           <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={'5vh'}>
             <ThemeProvider theme={theme}>
               <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={55} fontWeight={'bold'}>
@@ -165,6 +167,60 @@ export default function ButtonAppBar() {
             </ThemeProvider>
           </Stack>
         </Stack>
+
+        <Container>
+          <ThemeProvider theme={theme}>
+            <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={27} fontWeight={'bold'} paddingTop={'5vh'}>
+              CourseOwl
+            </Typography>
+            <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={13} fontWeight={'bold'} paddingTop={'5px'}>
+              Made by Purdue Students
+            </Typography>
+            <Typography component="div" sx={{ flexGrow: 1}} align='left' fontWeight={'bold'} fontSize={22} paddingTop={'1vh'}>
+              Contact Us
+            </Typography>
+            <Stack direction={'row'} alignItems={'center'}>
+              <Typography component="div" sx={{ flexGrow: 1}} align='left' fontSize={18} paddingTop={'1vh'}>
+                Sai Edupulapati
+              </Typography>
+              <Typography component="div" sx={{ flexGrow: 1}} align='right' fontSize={18} paddingTop={'1vh'}>
+                vedupula@purdue.edu
+              </Typography>
+              <img src={github} alt='github' width={'20'}></img>
+              <img src={linkedin} alt='link' width={'20'}></img>
+            </Stack>
+            <Stack direction={'row'} alignItems={'center'}>
+              <Typography component="div" sx={{ flexGrow: 1}} align='left' fontSize={18} paddingTop={'1vh'}>
+                Kushagra Govil
+              </Typography>
+              <Typography component="div" sx={{ flexGrow: 1}} align='right' fontSize={18} paddingTop={'1vh'}>
+                kgovil@purdue.edu
+              </Typography>
+              <img src={github} alt='github' width={'20'} height={'20'}></img>
+              <img src={linkedin} alt='link' width={'20'} height={'20'}></img>
+            </Stack>
+            <Stack direction={'row'} paddingBottom={'5vh'} alignItems={'center'}>
+              <Typography component="div" sx={{ flexGrow: 1}} align='left' fontSize={18} paddingTop={'1vh'}>
+                Jay Mehta
+              </Typography>
+              <Typography component="div" sx={{ flexGrow: 1}} align='right' fontSize={18} paddingTop={'1vh'}>
+                mehta208@purdue.edu
+              </Typography>
+              <img src={github} alt='github' width={'20'} height={'20'}></img>
+              <img src={linkedin} alt='link' width={'20'} height={'20'}></img>
+            </Stack>
+          </ThemeProvider>
+        </Container>
+
+        {/* <Stack height={'30vh'} spacing={2} display={'flex'} alignItems={'center'} paddingTop={'5vh'}>
+          <Stack alignItems={'center'} display={'flex'}>
+          <ThemeProvider theme={theme}>
+            <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={23} fontWeight={'bold'}>
+                CourseOwl
+            </Typography>
+          </ThemeProvider>
+          </Stack>
+        </Stack> */}
     </Box>
   );
 }
