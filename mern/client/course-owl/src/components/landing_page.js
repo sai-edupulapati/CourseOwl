@@ -18,6 +18,7 @@ import review from '../assets/like2.png'
 import ControlledAccordions from './faq_dropdown';
 import github from '../assets/github.png'
 import linkedin from '../assets/in.png'
+import NavBar from './navbar';
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -50,7 +51,7 @@ export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Paper style={styles.paperContainer} sx={{height: "90vh", paddingTop: "15px"}} elevation={0}>
-      <AppBar position="static" color='transparent' elevation={0}>
+      {/* <AppBar position="static" color='transparent' elevation={0}>
         <img style={styles.icon} src={logo} alt='logo'></img>
         <Toolbar>
           <IconButton
@@ -69,7 +70,9 @@ export default function ButtonAppBar() {
               <button className='button-54'>Log In</button>
           </ThemeProvider>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
+
+      <NavBar></NavBar>
       <Box paddingTop={'13vh'}>
       <ThemeProvider theme={theme}>
         <Container maxWidth={'sm'}>
