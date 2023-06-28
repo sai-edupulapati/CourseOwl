@@ -51,27 +51,6 @@ export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Paper style={styles.paperContainer} sx={{height: "90vh", paddingTop: "15px"}} elevation={0}>
-      {/* <AppBar position="static" color='transparent' elevation={0}>
-        <img style={styles.icon} src={logo} alt='logo'></img>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2, justifyContent: 'left' }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <ThemeProvider theme={theme}>
-              <Typography component="div" sx={{ flexGrow: 1 }} fontSize={30} fontWeight={'bold'}>
-                CourseOwl
-              </Typography>
-              <button className='button-54'>Log In</button>
-          </ThemeProvider>
-        </Toolbar>
-      </AppBar> */}
-
       <NavBar></NavBar>
       <Box paddingTop={'13vh'}>
       <ThemeProvider theme={theme}>
@@ -89,7 +68,7 @@ export default function ButtonAppBar() {
       </Box>
       
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
-        <button className='button-54'>Learn More</button>
+        <button className='button-54' onClick={() => {window.location.href = '/navbar'}}>Learn More</button>
       </Container>
       
       </Paper>
