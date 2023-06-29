@@ -75,7 +75,6 @@ export default function MainLogin() {
                                         </IconButton>
                                     </InputAdornment>
                                 }
-                                label="Your Password" 
                             />
                         </FormControl>
                         <Link href="#" underline="hover" paddingBottom={3} sx = {{color:"#1e88e5" }}>
