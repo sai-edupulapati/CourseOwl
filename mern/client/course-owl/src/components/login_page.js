@@ -1,10 +1,15 @@
-import { Button, Grid, Link } from '@mui/material';
+import { Button, Divider, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput } from '@mui/material';
 import { CssBaseline, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import { color, Container, Stack } from "@mui/system";
 import logo from '../assets/owl.png'
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
+import * as React from 'react';
+import { FormControl } from '@mui/base';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const font = "'Belanosima', sans-serif"
 const styles = {
     box: {
         background: "radial-gradient(white,#e1f5fe)",
@@ -34,7 +39,12 @@ const styles = {
     }
 };
 export default function MainLogin() {
-
+    const [showPassword, setShowPassword] = React.useState(false);
+    
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
     return (
         <CssBaseline>
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -47,31 +57,53 @@ export default function MainLogin() {
                         <Typography  >
                             Email address <span style ={{fontWeight:"bold", color:"#1e88e5"}}>*</span>
                         </Typography>
-                        <TextField id="outlined-basic" label="courseowl@gmail.com" variant="outlined" size = "small">
+                        <TextField id="outlined-basic" variant="outlined" size = "small">
                         </TextField>
                     </Stack>
                     <Stack paddingTop={3} sx = {styles.stack}>
                         <Typography  >
                             Password <span style ={{fontWeight:"bold", color:"#1e88e5"}}>*</span>
                         </Typography>
-                        <TextField id="outlined-basic" label="Your Password" variant="outlined" size = "small">
-                        </TextField>
+                        <FormControl variant="outlined" sx ={{m:30}}>
+                            <OutlinedInput size="small" fullWidth="true" id="outlined-adornment-password" 
+                                type={showPassword ? 'text' : 'password'} 
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} 
+                                            onMouseDown={handleMouseDownPassword} edge="end">
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Your Password" 
+                            />
+                        </FormControl>
                         <Link href="#" underline="hover" paddingBottom={3} sx = {{color:"#1e88e5" }}>
-                        Forgot Password?
+                        Forgot Passwor?
                         </Link>
                         <Link href="#" underline="none">
                         <Button sx = {{backgroundColor:"#1e88e5", fontWeight:"bold"}} fullWidth="true" variant="contained">Login</Button>
                         </Link>
                     </Stack>
-                    <Grid paddingTop={3} sx = {styles.stack} container direction="column" justifyContent="center" alignItems="center">
-                            <Link href="#" underline="hover">
+                    <Grid paddingTop={3} paddingBottom={2} sx = {styles.stack} container direction="column" justifyContent="center" alignItems="center">
+                            <Link color="#1e88e5" href="#" underline="hover">
                                 Need an account? Register
                             </Link>
-                            <Link href="#" underline="hover">
+                            <Link color="#1e88e5" href="#" underline="hover">
                                 Continue as Guest
                             </Link>
                     </Grid>
-                    
+                    <Divider sx={styles.stack}> <Typography fontWeight={'bold'} variant="subtitle2">OR</Typography></Divider>
+                    {/* <Typography sx={styles.stack} color="#1e88e5" >Sign in using...</Typography> */}
+                    {/* <Grid paddingTop={3} paddingBottom={2} sx = {styles.stack} container direction="column" justifyContent="center" alignItems="center">
+                            <Link href="#" underline="hover">
+                                <Button size= "large" sx={{background:"white", color:"black"}} variant="outlined"><GoogleIcon color="black" paddingRight={3}/><span paddingLeft={3}>Google</span></Button>
+                            </Link>
+                            <Link  href="#" underline="hover">
+                                Continue as Guest
+                            </Link>
+                    </Grid> */}
+                   
                 </Box>
             </Box>
         </CssBaseline >
