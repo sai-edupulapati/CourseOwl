@@ -20,7 +20,7 @@ const styles = {
         },
         borderRadius : 4,
         width:400, 
-        height:600
+        // height : 600
     },
     icon : {
         width : 50,
@@ -40,11 +40,21 @@ const styles = {
 };
 export default function MainLogin() {
     const [showPassword, setShowPassword] = React.useState(false);
-    
+    const [email,setEmail] = React.useState("");
+    const [password,setPassword] = React.useState("");
+    const [validEmail,setValidEmail] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+        event.preventDefault();
+    };
+    const handleLogin = () => {
+        setValidEmail(/^\S+@\S+$/.test(email) ? true : false)
+        if (validEmail) {
+            console.log(email,password)
+        };
+        
+    };
+    
     return (
         <CssBaseline>
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -57,15 +67,20 @@ export default function MainLogin() {
                         <Typography  >
                             Email address <span style ={{fontWeight:"bold", color:"#1e88e5"}}>*</span>
                         </Typography>
-                        <TextField placeholder='courseowl@gmail.com' id="outlined-basic" variant="outlined" size = "small">
+                        <TextField  placeholder='courseowl@gmail.com' id="outlined-basic" variant="outlined" size = "small" 
+                            onChange={(event) => {
+                            setEmail(event.target.value);
+                            setValidEmail(true);
+                        }}>
                         </TextField>
+                        {!validEmail && <Typography sx = {{color:"#1e88e5" }}>Invalid email</Typography>}
                     </Stack>
                     <Stack paddingTop={3} sx = {styles.stack}>
                         <Typography  >
                             Password <span style ={{fontWeight:"bold", color:"#1e88e5"}}>*</span>
                         </Typography>
                         <FormControl variant="outlined" sx ={{m:30}}>
-                            <OutlinedInput placeholder='Your password' size="small" fullWidth="true" id="outlined-adornment-password" 
+                            <OutlinedInput placeholder='Your password' size="small" fullWidth id="outlined-adornment-password" 
                                 type={showPassword ? 'text' : 'password'} 
                                 endAdornment={
                                     <InputAdornment position="end">
@@ -75,13 +90,14 @@ export default function MainLogin() {
                                         </IconButton>
                                     </InputAdornment>
                                 }
-                            />
+                                onChange = {(event) => {setPassword(event.target.value);
+                            }}/>
                         </FormControl>
                         <Link href="#" underline="hover" paddingBottom={3} sx = {{color:"#1e88e5" }}>
                         Forgot Password?
                         </Link>
                         <Link href="#" underline="none">
-                        <Button sx = {{backgroundColor:"#1e88e5", fontWeight:"bold"}} fullWidth="true" variant="contained">Login</Button>
+                        <Button sx = {{backgroundColor:"#1e88e5", fontWeight:"bold"}} fullWidth variant="contained" onClick={handleLogin}>Login</Button>
                         </Link>
                     </Stack>
                     <Grid paddingTop={3} paddingBottom={2} sx = {styles.stack} container direction="column" justifyContent="center" alignItems="center">
