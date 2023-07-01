@@ -57,7 +57,7 @@ export default function MainLogin() {
                         <Typography  >
                             Email address <span style ={{fontWeight:"bold", color:"#1e88e5"}}>*</span>
                         </Typography>
-                        <TextField id="outlined-basic" variant="outlined" size = "small">
+                        <TextField placeholder='courseowl@gmail.com' id="outlined-basic" variant="outlined" size = "small">
                         </TextField>
                     </Stack>
                     <Stack paddingTop={3} sx = {styles.stack}>
@@ -65,7 +65,7 @@ export default function MainLogin() {
                             Password <span style ={{fontWeight:"bold", color:"#1e88e5"}}>*</span>
                         </Typography>
                         <FormControl variant="outlined" sx ={{m:30}}>
-                            <OutlinedInput size="small" fullWidth="true" id="outlined-adornment-password" 
+                            <OutlinedInput placeholder='Your password' size="small" fullWidth="true" id="outlined-adornment-password" 
                                 type={showPassword ? 'text' : 'password'} 
                                 endAdornment={
                                     <InputAdornment position="end">
@@ -78,7 +78,7 @@ export default function MainLogin() {
                             />
                         </FormControl>
                         <Link href="#" underline="hover" paddingBottom={3} sx = {{color:"#1e88e5" }}>
-                        Forgot Passwor?
+                        Forgot Password?
                         </Link>
                         <Link href="#" underline="none">
                         <Button sx = {{backgroundColor:"#1e88e5", fontWeight:"bold"}} fullWidth="true" variant="contained">Login</Button>
