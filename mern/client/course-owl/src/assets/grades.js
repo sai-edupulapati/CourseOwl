@@ -1,3 +1,5 @@
+import {groupBy} from "core-js/actual/array/group-by"
+
 export const Courses = [
     {
       "Subject": "AAE",
