@@ -52,7 +52,7 @@ export default function NavBar() {
 
   const boxStyle = {
     paddingLeft: '20px',
-    paddingRight: '20px'
+    paddingRight: '10px'
   };
 
   return (

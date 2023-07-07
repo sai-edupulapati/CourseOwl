@@ -18,7 +18,8 @@ import review from '../assets/like2.png'
 import ControlledAccordions from './faq_dropdown';
 import github from '../assets/github.png'
 import linkedin from '../assets/in.png'
-import NavBar from './navbar';
+import NavBar from './navbar'
+import NavB from './scheduler';
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -68,7 +69,7 @@ export default function ButtonAppBar() {
       </Box>
       
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
-        <button className='button-54' onClick={() => {window.location.href = '/navbar'}}>Learn More</button>
+        <button className='button-54' onClick={() => {window.location.href = '/scheduler'}}>Learn More</button>
       </Container>
       
       </Paper>
