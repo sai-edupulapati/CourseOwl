@@ -46,12 +46,25 @@ export default function Grades() {
             <NavBar></NavBar>
             <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
                 <ThemeProvider theme={theme}>
-                    <Stack>
+                    <Stack width={'70vw'} sx={{display: 'flex', alignItems: 'center'}} spacing={5}>
                         <TextField label="Enter Course" variant="standard" fullWidth onChange={(e) => (setQuery(e.target.value))}/>
-                        <ul>
+                        <ul style={{listStyleType: 'none'}}>
                             {Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).map((course) => (
                                 // <li>{course.Course}</li>
-                                <li><Typography>{course.Course}</Typography></li>
+                                <li style={{ paddingBottom: '2vh' }}>      <Accordion sx={{ width: '80vw' }}>
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel1a-content"
+                                  id="panel1a-header"
+                                >
+                                  <Typography>{course.Course}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                  <Typography>
+                                    This should be filled with course information.
+                                  </Typography>
+                                </AccordionDetails>
+                              </Accordion></li>
                             ))}
                         </ul>
                     </Stack>
