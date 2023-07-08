@@ -58,7 +58,7 @@ let array = csv.split("\n")
 let array2 = []
 
 array.forEach(function(line) {
-    array2.push(line.split(",").splice(7,24))
+    array2.push(line.split(",").slice(7,10).map(Number))
 })
 
 console.log('LOGGING ARRAY 2')
@@ -73,47 +73,69 @@ export default function Grades() {
 
     useEffect(() => {
         const filterCourses = async () => {
-            setCourseData(Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).splice(0,10))
+            setCourseData(Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).slice(0,10))
         }
         filterCourses();
     }, [query])    
 
-    // useEffect(() => {
-    //     courseData.forEach((course) => {
-    //         const w = 300;
-    //         const h = 300;
-    //         const radius = w / 2;
-    //         const svg = d3.select(svgRef.current).attr('width', w).attr('height', h).style('overflow', 'visible');
-    //         const formattedData = d3.pie().value(d => d.A)(courseData);
-    //         const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
-    //         const color = d3.scaleOrdinal().range(d3.schemeSet1);
-    //         svg.selectAll().data(formattedData).join('path').attr('d', arcGenerator).attr('fill', d => color(d.value)).style('opacity', 0.7)
-    //     })
-    // }, [courseData])
+    useEffect(() => {
+
+        console.log("GOT TO THIS USE STATE")
+
+        courseData.forEach((course) => {
+            const courseIndex = parseInt(course.Index)
+
+            console.log(courseIndex)
+
+            var data = array2[courseIndex]
+
+            console.log(data)
+
+            var svg = d3.select("svg")
+
+            let g = svg.append("g").attr("transform", "translate(150, 120)")
+
+            var pie = d3.pie()
+
+            var arc = d3.arc().innerRadius(0).outerRadius(100)
+
+            var arcs = g.selectAll("arc").data(pie(data)).enter().append("g")
+
+            arcs.append("path").attr("fill", (data, i) => {
+                let value = data.data
+                return d3.schemeSet3[i];
+            }).attr("d", arc)
+
+        })
+    }, [courseData])
 
     return (
         <Box sx={{ flexGrow: 1 }} bgcolor={'rgb(219, 227, 236)'} minHeight={'100vh'}>
             <NavBar></NavBar>
+            {/* <svg width={"300"} height={"300"}></svg> */}
             <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
                 <ThemeProvider theme={theme}>
                     <Stack width={'70vw'} sx={{display: 'flex', alignItems: 'center'}} spacing={5}>
                         <TextField label="Enter Course" variant="standard" fullWidth onChange={(e) => (setQuery(e.target.value))}/>
                         <ul style={{listStyleType: 'none'}}>
                             {courseData.map((course) => (
-                                <li style={{ paddingBottom: '2vh' }}>      <Accordion sx={{ width: '80vw' }} elevation={3}>
-                                <AccordionSummary sx={{ backgroundColor: 'rgb(219, 227, 236)' }}
-                                  expandIcon={<ExpandMoreIcon />}
-                                  aria-controls="panel1a-content"
-                                  id="panel1a-header"
-                                >
-                                  <Typography>{course.Course}: {course.Title}</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
-                                  <Typography>
-                                    Instructor: {course.Instructor}
-                                  </Typography>
-                                </AccordionDetails>
-                              </Accordion></li>
+                                <li style={{ paddingBottom: '2vh' }} key={course.Index}>
+                                    <Accordion sx={{ width: '80vw' }} elevation={3}>
+                                        <AccordionSummary sx={{ backgroundColor: 'rgb(219, 227, 236)' }}
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                        >
+                                            <Typography>{course.Course}: {course.Title}</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
+                                            <svg width={"300"} height={"300"}></svg>
+                                            <Typography>
+                                                Instructor: {course.Instructor} A: {course.A} A-: {course['A-']}
+                                            </Typography>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </li>
                             ))}
                         </ul>
                     </Stack>
