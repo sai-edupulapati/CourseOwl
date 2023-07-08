@@ -58,7 +58,7 @@ let array = csv.split("\n")
 let array2 = []
 
 array.forEach(function(line) {
-    array2.push(line.split(",").slice(7,10).map(Number))
+    array2.push(line.split(",").slice(7,30).map(Number))
 })
 
 console.log('LOGGING ARRAY 2')
@@ -91,7 +91,9 @@ export default function Grades() {
 
             console.log(data)
 
-            var svg = d3.select("svg")
+            console.log("LOGGING KEY")
+            console.log("svg" + course.Index)
+            var svg = d3.select("#svg" + course.Index)
 
             let g = svg.append("g").attr("transform", "translate(150, 120)")
 
@@ -112,7 +114,6 @@ export default function Grades() {
     return (
         <Box sx={{ flexGrow: 1 }} bgcolor={'rgb(219, 227, 236)'} minHeight={'100vh'}>
             <NavBar></NavBar>
-            {/* <svg width={"300"} height={"300"}></svg> */}
             <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
                 <ThemeProvider theme={theme}>
                     <Stack width={'70vw'} sx={{display: 'flex', alignItems: 'center'}} spacing={5}>
@@ -120,7 +121,11 @@ export default function Grades() {
                         <ul style={{listStyleType: 'none'}}>
                             {courseData.map((course) => (
                                 <li style={{ paddingBottom: '2vh' }} key={course.Index}>
-                                    <Accordion sx={{ width: '80vw' }} elevation={3}>
+                                    <Stack>
+                                        <svg width={"300"} height={"300"} id={"svg" + course.Index}></svg>
+                                        <Typography>{course.Course}</Typography>
+                                    </Stack>
+                                    {/* <Accordion sx={{ width: '80vw' }} elevation={3}>
                                         <AccordionSummary sx={{ backgroundColor: 'rgb(219, 227, 236)' }}
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-controls="panel1a-content"
@@ -129,12 +134,12 @@ export default function Grades() {
                                             <Typography>{course.Course}: {course.Title}</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
-                                            <svg width={"300"} height={"300"}></svg>
+                                            <svg width={"300"} height={"300"} key={"svg" + course.Index}></svg>
                                             <Typography>
                                                 Instructor: {course.Instructor} A: {course.A} A-: {course['A-']}
                                             </Typography>
                                         </AccordionDetails>
-                                    </Accordion>
+                                    </Accordion> */}
                                 </li>
                             ))}
                         </ul>
