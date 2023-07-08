@@ -1,128 +1,108 @@
-import React, { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import React, { useState, useRef, useEffect } from 'react';
+import { DayPilot, DayPilotCalendar, DayPilotNavigator } from "@daypilot/daypilot-lite-react";
+import "./CalendarStyles.css";
 
-const theme = createTheme({
-  typography: {
-    fontFamily: "'Belanosima', sans-serif",
+const styles = {
+  wrap: {
+    display: "flex"
   },
-});
-
-const CalendarPage = () => {
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const timeSlots = Array.from({ length: 28 }, (_, index) => {
-    const hour = Math.floor(index / 2) + 6;
-    const minutes = index % 2 === 0 ? '00' : '30';
-    return `${hour}:${minutes}`;
-  });
-
-  const [selectedCourses, setSelectedCourses] = useState([]);
-
-  const handleCourseClick = (course) => {
-    setSelectedCourses((prevCourses) => [...prevCourses, course]);
-  };
-
-  const isCourseSelected = (course) => {
-    return selectedCourses.some((selectedCourse) => selectedCourse.name === course.name);
-  };
-
-  const renderCourseOptions = () => {
-    const courseOptions = [
-      { name: 'Course A', day: 'Monday', startTime: '7:00', endTime: '8:00' },
-      { name: 'Course B', day: 'Tuesday', startTime: '9:30', endTime: '11:00' },
-      { name: 'Course C', day: 'Wednesday', startTime: '14:00', endTime: '16:00' },
-      // Add more course options as needed
-    ];
-
-    return courseOptions.map((course) => (
-      <Box
-        key={course.name}
-        onClick={() => handleCourseClick(course)}
-        style={{ cursor: 'pointer' }}
-        bgcolor={isCourseSelected(course) ? '#aaffaa' : 'inherit'}
-        padding="8px"
-        marginBottom="8px"
-      >
-        <Typography variant="body1" align="center" fontWeight="bold">
-          {course.name}
-        </Typography>
-        <Typography variant="body2" align="center">
-          {`${course.startTime} - ${course.endTime}`}
-        </Typography>
-      </Box>
-    ));
-  };
-
-  const renderCalendarItems = () => {
-    return days.map((day) => (
-      <Box
-        key={day}
-        flex="1"
-        border="1px solid #ccc"
-        padding="8px"
-        className="calendar-item"
-        data-day={day}
-      >
-        <Typography variant="h6" align="center" fontWeight="bold">
-          {day}
-        </Typography>
-        {timeSlots.map((time) => {
-          const course = selectedCourses.find(
-            (selectedCourse) => selectedCourse.day === day && selectedCourse.startTime === time
-          );
-          if (course) {
-            const endTimeSlot = timeSlots[timeSlots.indexOf(time) + 1];
-            return (
-              <Box
-                key={`${day}-${time}`}
-                bgcolor="#aaffaa"
-                padding="2px"
-                marginBottom="2px"
-              >
-                <Typography variant="body2" align="center">
-                  {`${time} - ${endTimeSlot}`}
-                </Typography>
-                <Typography variant="body2" align="center" fontWeight="bold">
-                  {course.name}
-                </Typography>
-              </Box>
-            );
-          }
-          return null;
-        })}
-      </Box>
-    ));
-  };
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Box>
-        <Typography variant="h4" align="center" fontWeight="bold">
-          Weekly Calendar
-        </Typography>
-        <Box display="flex">
-          <Box minWidth="100px" padding="8px">
-            <Typography variant="h6" align="center" fontWeight="bold">
-              Time
-            </Typography>
-            {timeSlots.map((time) => (
-              <Typography key={time} variant="body2" align="center">
-                {time}
-              </Typography>
-            ))}
-          </Box>
-          {renderCalendarItems()}
-        </Box>
-        <Box>
-          <Typography variant="h6" align="center" fontWeight="bold">
-            Course Options
-          </Typography>
-          {renderCourseOptions()}
-        </Box>
-      </Box>
-    </ThemeProvider>
-  );
+  left: {
+    marginRight: "10px"
+  },
+  main: {
+    flexGrow: "1"
+  }
 };
 
-export default CalendarPage;
+const Calendar = () => {
+  const calendarRef = useRef();
+  const [calendarConfig, setCalendarConfig] = useState({
+    viewType: "Week",
+    durationBarVisible: false,
+    timeRangeSelectedHandling: "Enabled",
+    onTimeRangeSelected: async args => {
+      const dp = calendarRef.current.control;
+      const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
+      dp.clearSelection();
+      if (!modal.result) { return; }
+      dp.events.add({
+        start: args.start,
+        end: args.end,
+        id: DayPilot.guid(),
+        text: modal.result
+      });
+    },
+    eventDeleteHandling: "Update",
+    onEventClick: async args => {
+      const dp = calendarRef.current.control;
+      const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
+      if (!modal.result) { return; }
+      const e = args.e;
+      e.data.text = modal.result;
+      dp.events.update(e);
+    },
+  });
+
+  useEffect(() => {
+    const events = [
+      {
+        id: 1,
+        text: "Event 1",
+        start: "2023-10-02T10:30:00",
+        end: "2023-10-02T13:00:00"
+      },
+      {
+        id: 2,
+        text: "Event 2",
+        start: "2023-10-03T09:30:00",
+        end: "2023-10-03T11:30:00",
+        backColor: "#6aa84f"
+      },
+      {
+        id: 3,
+        text: "Event 3",
+        start: "2023-10-03T12:00:00",
+        end: "2023-10-03T15:00:00",
+        backColor: "#f1c232"
+      },
+      {
+        id: 4,
+        text: "Event 4",
+        start: "2023-10-01T11:30:00",
+        end: "2023-10-01T14:30:00",
+        backColor: "#cc4125"
+      },
+    ];
+
+    const startDate = "2023-10-02";
+
+    calendarRef.current.control.update({startDate, events});
+  }, []);
+
+  return (
+    <div style={styles.wrap}>
+      <div style={styles.left}>
+        <DayPilotNavigator
+          selectMode={"Week"}
+          showMonths={3}
+          skipMonths={3}
+          startDate={"2023-10-02"}
+          selectionDay={"2023-10-02"}
+          onTimeRangeSelected={ args => {
+            calendarRef.current.control.update({
+              startDate: args.day
+            });
+          }}
+        />
+      </div>
+      <div style={styles.main}>
+        <DayPilotCalendar
+          {...calendarConfig}
+          ref={calendarRef}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default Calendar;
