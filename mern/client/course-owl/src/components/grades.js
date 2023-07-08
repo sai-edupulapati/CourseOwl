@@ -64,11 +64,11 @@ export default function Grades() {
                                   aria-controls="panel1a-content"
                                   id="panel1a-header"
                                 >
-                                  <Typography>{course.Course}</Typography>
+                                  <Typography>{course.Course}: {course.Title}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
                                   <Typography>
-                                    This should be filled with course information.
+                                    Instructor: {course.Instructor}
                                   </Typography>
                                 </AccordionDetails>
                               </Accordion></li>
