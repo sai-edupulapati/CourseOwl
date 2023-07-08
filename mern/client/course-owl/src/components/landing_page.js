@@ -66,7 +66,7 @@ export default function ButtonAppBar() {
               <Typography component="div" sx={{ flexGrow: 1 }} fontSize={30} fontWeight={'bold'}>
                 CourseOwl
               </Typography>
-              <button className='button-54'>Log In</button>
+              <button className='button-54' onClick={() => {window.location.href = '/login'}}>Log In</button>
           </ThemeProvider>
         </Toolbar>
       </AppBar>

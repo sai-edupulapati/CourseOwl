@@ -73,7 +73,7 @@ export default function MainLogin() {
                             setValidEmail(true);
                         }}>
                         </TextField>
-                        {!validEmail && <Typography sx = {{color:"#1e88e5" }}>Invalid email</Typography>}
+                        {!validEmail && email!="" && <Typography sx = {{color:"#1e88e5" }}>Invalid email</Typography>}
                     </Stack>
                     <Stack paddingTop={3} sx = {styles.stack}>
                         <Typography  >
@@ -101,8 +101,8 @@ export default function MainLogin() {
                         </Link>
                     </Stack>
                     <Grid paddingTop={3} paddingBottom={2} sx = {styles.stack} container direction="column" justifyContent="center" alignItems="center">
-                            <Link color="#1e88e5" href="#" underline="hover">
-                                Need an account? Register
+                            <Link color="#1e88e5" href="/register" underline="hover">
+                                Need an account? Register!
                             </Link>
                             <Link color="#1e88e5" href="#" underline="hover">
                                 Continue as Guest
