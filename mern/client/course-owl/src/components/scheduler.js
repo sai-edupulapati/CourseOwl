@@ -6,9 +6,6 @@ const styles = {
   wrap: {
     display: "flex"
   },
-  left: {
-    marginRight: "10px"
-  },
   main: {
     flexGrow: "1"
   }
@@ -41,6 +38,7 @@ const Calendar = () => {
       e.data.text = modal.result;
       dp.events.update(e);
     },
+    headerDateFormat: "dddd" // Set the format to display the day of the week
   });
 
   useEffect(() => {
@@ -76,25 +74,11 @@ const Calendar = () => {
 
     const startDate = "2023-10-02";
 
-    calendarRef.current.control.update({startDate, events});
+    calendarRef.current.control.update({ startDate, events });
   }, []);
 
   return (
     <div style={styles.wrap}>
-      <div style={styles.left}>
-        <DayPilotNavigator
-          selectMode={"Week"}
-          showMonths={3}
-          skipMonths={3}
-          startDate={"2023-10-02"}
-          selectionDay={"2023-10-02"}
-          onTimeRangeSelected={ args => {
-            calendarRef.current.control.update({
-              startDate: args.day
-            });
-          }}
-        />
-      </div>
       <div style={styles.main}>
         <DayPilotCalendar
           {...calendarConfig}
