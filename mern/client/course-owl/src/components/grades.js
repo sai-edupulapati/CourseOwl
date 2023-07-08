@@ -22,7 +22,7 @@ import NavBar from './navbar';
 import TextField from '@mui/material/TextField/TextField';
 //import { Courses } from '../assets/grades';
 import { Courses } from '../assets/grades';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Accordion from '@mui/material/Accordion/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -36,30 +36,37 @@ const theme = createTheme({
     }
 })
 
-
 export default function Grades() {
 
     const [query, setQuery] = useState("")
+    const [courseData, setCourseData] = useState(Courses.slice(0, 10))
+
+    useEffect(() => {
+        const filterCourses = async () => {
+            setCourseData(Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).splice(0,10))
+        }
+        filterCourses();
+    }, [query])    
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }} bgcolor={'rgb(219, 227, 236)'} minHeight={'100vh'}>
             <NavBar></NavBar>
             <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
                 <ThemeProvider theme={theme}>
                     <Stack width={'70vw'} sx={{display: 'flex', alignItems: 'center'}} spacing={5}>
                         <TextField label="Enter Course" variant="standard" fullWidth onChange={(e) => (setQuery(e.target.value))}/>
                         <ul style={{listStyleType: 'none'}}>
-                            {Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).map((course) => (
+                            {courseData.map((course) => (
                                 // <li>{course.Course}</li>
-                                <li style={{ paddingBottom: '2vh' }}>      <Accordion sx={{ width: '80vw' }}>
-                                <AccordionSummary
+                                <li style={{ paddingBottom: '2vh' }}>      <Accordion sx={{ width: '80vw' }} elevation={3}>
+                                <AccordionSummary sx={{ backgroundColor: 'rgb(219, 227, 236)' }}
                                   expandIcon={<ExpandMoreIcon />}
                                   aria-controls="panel1a-content"
                                   id="panel1a-header"
                                 >
                                   <Typography>{course.Course}</Typography>
                                 </AccordionSummary>
-                                <AccordionDetails>
+                                <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
                                   <Typography>
                                     This should be filled with course information.
                                   </Typography>
