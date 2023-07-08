@@ -40,9 +40,29 @@ const theme = createTheme({
 
 // npm install d3
 
-let array = csv.split("\\n").map(function (line) {
-    return line.split(",").splice(6,29);
-});
+// let array = csv.split("\\n").map(function (line) {
+//     return line.split(",").splice(7,24);
+// });
+
+// console.log(array)
+
+// let array3 = []
+
+// let array2 = csv.split("\\n").forEach(function (line) {
+//     array3.push(line.split(",").splice(7,24))
+// })
+
+// console.log(array3)
+
+let array = csv.split("\n")
+let array2 = []
+
+array.forEach(function(line) {
+    array2.push(line.split(",").splice(8,24))
+})
+
+console.log('LOGGING ARRAY 2')
+console.log(array2)
 
 export default function Grades() {
 
@@ -58,18 +78,18 @@ export default function Grades() {
         filterCourses();
     }, [query])    
 
-    useEffect(() => {
-        courseData.forEach((course) => {
-            const w = 300;
-            const h = 300;
-            const radius = w / 2;
-            const svg = d3.select(svgRef.current).attr('width', w).attr('height', h).style('overflow', 'visible');
-            const formattedData = d3.pie().value(d => d.A)(courseData);
-            const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
-            const color = d3.scaleOrdinal().range(d3.schemeSet1);
-            svg.selectAll().data(formattedData).join('path').attr('d', arcGenerator).attr('fill', d => color(d.value)).style('opacity', 0.7)
-        })
-    }, [courseData])
+    // useEffect(() => {
+    //     courseData.forEach((course) => {
+    //         const w = 300;
+    //         const h = 300;
+    //         const radius = w / 2;
+    //         const svg = d3.select(svgRef.current).attr('width', w).attr('height', h).style('overflow', 'visible');
+    //         const formattedData = d3.pie().value(d => d.A)(courseData);
+    //         const arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
+    //         const color = d3.scaleOrdinal().range(d3.schemeSet1);
+    //         svg.selectAll().data(formattedData).join('path').attr('d', arcGenerator).attr('fill', d => color(d.value)).style('opacity', 0.7)
+    //     })
+    // }, [courseData])
 
     return (
         <Box sx={{ flexGrow: 1 }} bgcolor={'rgb(219, 227, 236)'} minHeight={'100vh'}>
@@ -91,7 +111,6 @@ export default function Grades() {
                                 <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
                                   <Typography>
                                     Instructor: {course.Instructor}
-                                    <svg ref={svgRef}></svg>
                                   </Typography>
                                 </AccordionDetails>
                               </Accordion></li>
