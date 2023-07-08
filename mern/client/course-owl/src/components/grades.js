@@ -58,7 +58,7 @@ let array = csv.split("\n")
 let array2 = []
 
 array.forEach(function(line) {
-    array2.push(line.split(",").splice(8,24))
+    array2.push(line.split(",").splice(7,24))
 })
 
 console.log('LOGGING ARRAY 2')
