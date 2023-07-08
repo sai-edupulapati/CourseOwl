@@ -19,21 +19,50 @@ import ControlledAccordions from './faq_dropdown';
 import github from '../assets/github.png'
 import linkedin from '../assets/in.png'
 import NavBar from './navbar';
+import TextField from '@mui/material/TextField/TextField';
 //import { Courses } from '../assets/grades';
 import { Courses } from '../assets/grades';
 import { useState } from 'react';
+import Accordion from '@mui/material/Accordion/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import AccordionDetails from '@mui/material/AccordionDetails/AccordionDetails';
+
+const font = "'Belanosima', sans-serif"
+const theme = createTheme({
+    typography: {
+        fontFamily: font,
+        button: {textTransform: "none"}
+    }
+})
+
+
 export default function Grades() {
 
     const [query, setQuery] = useState("")
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <input placeholder='Enter Course' onChange={(e) => (setQuery(e.target.value))}></input>
+            <NavBar></NavBar>
+            <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '60px' }}>
+                <ThemeProvider theme={theme}>
+                    <Stack>
+                        <TextField label="Enter Course" variant="standard" fullWidth onChange={(e) => (setQuery(e.target.value))}/>
+                        <ul>
+                            {Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).map((course) => (
+                                // <li>{course.Course}</li>
+                                <li><Typography>{course.Course}</Typography></li>
+                            ))}
+                        </ul>
+                    </Stack>
+                </ThemeProvider>
+            </Container>
+            {/* <input placeholder='Enter Course' onChange={(e) => (setQuery(e.target.value))}></input>
             <ul>
                 {Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).map((course) => (
                     <li>{course.Course}</li>
                 ))}
-            </ul>
+            </ul> */}
         </Box>
     )
 }
