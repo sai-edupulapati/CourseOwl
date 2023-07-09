@@ -118,6 +118,12 @@ export default function Grades() {
         })
     }, [courseData])
 
+    useEffect(() => {
+        courseData.forEach((course) => {
+            
+        })
+    })
+
     return (
         <Box sx={{ flexGrow: 1 }} bgcolor={'rgb(219, 227, 236)'} minHeight={'100vh'}>
             <NavBar></NavBar>
@@ -129,7 +135,7 @@ export default function Grades() {
                             {courseData.map((course) => (
                                 <li style={{ paddingBottom: '2vh' }} key={course.Index}>
                                     <Stack width={"70vw"}>
-                                        <Accordion sx={{ bgcolor: "rgb(0, 174, 196, 0.3)" }} className='button-54'>
+                                        <Accordion sx={{ bgcolor: "rgb(0, 174, 196, 0.2)" }} className='button-54'>
                                             <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
@@ -152,12 +158,6 @@ export default function Grades() {
                     </Stack>
                 </ThemeProvider>
             </Container>
-            {/* <input placeholder='Enter Course' onChange={(e) => (setQuery(e.target.value))}></input>
-            <ul>
-                {Courses.filter((course) => (course.Course.toLowerCase().includes(query.toLowerCase()))).map((course) => (
-                    <li>{course.Course}</li>
-                ))}
-            </ul> */}
         </Box>
     )
 }
