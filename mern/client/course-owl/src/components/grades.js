@@ -30,6 +30,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccordionDetails from '@mui/material/AccordionDetails/AccordionDetails';
 import * as d3 from 'd3'
 import { schemeset } from '../assets/grades';
+import StackedBarChart from './bar_chart';
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -118,11 +119,20 @@ export default function Grades() {
         })
     }, [courseData])
 
-    useEffect(() => {
-        courseData.forEach((course) => {
+    // useEffect(() => {
+    //     courseData.forEach((course) => {
             
-        })
-    })
+    //     })
+    // })
+
+    const data = [
+        { category: 'A', value1: 10, value2: 15, value3: 20 },
+        { category: 'B', value1: 5, value2: 8, value3: 12 },
+        { category: 'C', value1: 12, value2: 6, value3: 18 },
+        { category: 'D', value1: 8, value2: 10, value3: 16 }
+      ];
+      
+
 
     return (
         <Box sx={{ flexGrow: 1 }} bgcolor={'rgb(219, 227, 236)'} minHeight={'100vh'}>
@@ -149,6 +159,7 @@ export default function Grades() {
                                                     malesuada lacus ex, sit amet blandit leo lobortis eget.
                                                 </Typography>
                                                 <svg width={"300"} height={"300"} id={"svg" + course.Index}></svg>
+                                                <StackedBarChart data={data}></StackedBarChart>
                                             </AccordionDetails>
                                         </Accordion>
                                     </Stack>

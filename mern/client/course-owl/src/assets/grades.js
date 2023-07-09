@@ -25535,6 +25535,39 @@ export const Courses = [
   }
 ]
 
+export const Data = [
+  {
+    id: 1,
+    year: 2016,
+    userGain: 80000,
+    userLost: 823
+  },
+  {
+    id: 2,
+    year: 2017,
+    userGain: 45677,
+    userLost: 345
+  },
+  {
+    id: 3,
+    year: 2018,
+    userGain: 78888,
+    userLost: 555
+  },
+  {
+    id: 4,
+    year: 2019,
+    userGain: 90000,
+    userLost: 4555
+  },
+  {
+    id: 5,
+    year: 2020,
+    userGain: 4300,
+    userLost: 234
+  }
+];
+
 export const csv = 
 `Index,Subject,Course Number,Title,Section,CRN,Instructor,A,A-,A+,AU,B,B-,B+,C,C-,C+,D,D-,D+,E,F,I,N,P,PI,S,SI,U,W,WF,Course
 1,AAE,20300,Aeromechanics I,2,32008,Burton| Alexander B.,0.17,0,0.13,0,0.13,0,0,0,0.09,0.04,0.04,0,0.04,0,0.17,0,0,0,0,0,0,0,0.13,0.04,AAE 20300
