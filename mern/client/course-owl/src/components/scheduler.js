@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { DayPilot, DayPilotCalendar, DayPilotNavigator } from "@daypilot/daypilot-lite-react";
+import React, { useState, useRef } from 'react';
+import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import "./CalendarStyles.css";
+import Papa from 'papaparse';
 
 const styles = {
   wrap: {
@@ -20,6 +21,8 @@ const styles = {
 
 const Calendar = () => {
   const calendarRef = useRef();
+  const fileInputRef = useRef(null);
+
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
     durationBarVisible: false,
@@ -48,57 +51,46 @@ const Calendar = () => {
     headerDateFormat: "dddd" // Set the format to display the day of the week
   });
 
+
   const [eventButtons, setEventButtons] = useState([]);
-  const [eventsVisible, setEventsVisible] = useState(false); // State to track if events are visible
+  const [eventsVisible, setEventsVisible] = useState(false);
 
-  useEffect(() => {
-    const initialEvents = [
-      {
-        id: 1,
-        text: "Event 1",
-        start: ["2023-10-02T11:00:00", "2023-10-04T11:00:00"],
-        end: ["2023-10-02T13:00:00", "2023-10-04T13:00:00"]
-      },
-      {
-        id: 2,
-        text: "Event 2",
-        start: ["2023-10-03T09:30:00"],
-        end: ["2023-10-03T11:30:00"],
-        backColor: "#6aa84f"
-      },
-      {
-        id: 3,
-        text: "Event 3",
-        start: ["2023-10-03T12:00:00"],
-        end: ["2023-10-03T15:00:00"],
-        backColor: "#f1c232"
-      },
-      {
-        id: 4,
-        text: "Event 4",
-        start: ["2023-10-01T11:30:00"],
-        end: ["2023-10-01T14:30:00"],
-        backColor: "#cc4125"
-      },
-    ];
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        complete: handleFileRead
+      });
+    }
+  };
 
-    const startDate = "2023-10-02";
+  const handleFileRead = (results) => {
+    const parsedEvents = results.data.map(row => {
+      const name = row['Name'];
+      const start = row['Published Start'];
+      const end = row['Published End'];
 
-    calendarRef.current.control.update({ startDate });
+      return {
+        text: name,
+        start: [start],
+        end: [end],
+        id: DayPilot.guid()
+      };
+    });
 
-    // Create event buttons
-    const buttons = initialEvents.map(event => (
-      <button
-        key={event.id}
-        style={styles.eventButton}
-        onClick={() => handleEventButtonClick(event)}
-      >
-        {event.text}
-      </button>
-    ));
-
-    setEventButtons(buttons);
-  }, []);
+    setEventButtons(
+      parsedEvents.map(event => (
+        <button
+          key={event.id}
+          style={styles.eventButton}
+          onClick={() => handleEventButtonClick(event)}
+        >
+          {event.text}
+        </button>
+      ))
+    );
+  };
 
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
@@ -119,6 +111,8 @@ const Calendar = () => {
   return (
     <div style={styles.wrap}>
       <div style={styles.eventList}>
+        <input type="file" accept=".csv" onChange={handleFileChange} ref={fileInputRef} />
+        <button onClick={() => fileInputRef.current.click()}>Upload CSV</button>
         <button onClick={handleShowEvents}>Show Events</button>
         {eventsVisible && eventButtons}
       </div>
@@ -130,6 +124,6 @@ const Calendar = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Calendar;
