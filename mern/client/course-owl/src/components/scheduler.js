@@ -21,7 +21,6 @@ const styles = {
 
 const Calendar = () => {
   const calendarRef = useRef();
-  const fileInputRef = useRef(null);
 
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
@@ -51,45 +50,63 @@ const Calendar = () => {
     headerDateFormat: "dddd" // Set the format to display the day of the week
   });
 
-
   const [eventButtons, setEventButtons] = useState([]);
-  const [eventsVisible, setEventsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        complete: handleFileRead
-      });
-    }
-  };
+  const handleFileChange = async () => {
+    const filePaths = [
+      "/events.csv", // Assuming the file is in the public directory
+      "/eventsCS.csv"
+    ];
 
-  const handleFileRead = (results) => {
-    const parsedEvents = results.data.map(row => {
-      const name = row['Name'];
-      const start = row['Published Start'];
-      const end = row['Published End'];
+    setLoading(true);
 
-      return {
-        text: name,
-        start: [start],
-        end: [end],
-        id: DayPilot.guid()
-      };
+    const promises = filePaths.map(filePath => {
+      return fetch(filePath)
+        .then(response => response.text())
+        .then(csvData => {
+          return new Promise((resolve, reject) => {
+            Papa.parse(csvData, {
+              header: true,
+              complete: (results) => resolve(results.data),
+              error: reject
+            });
+          });
+        });
     });
 
-    setEventButtons(
-      parsedEvents.map(event => (
-        <button
-          key={event.id}
-          style={styles.eventButton}
-          onClick={() => handleEventButtonClick(event)}
-        >
-          {event.text}
-        </button>
-      ))
-    );
+    try {
+      const results = await Promise.all(promises);
+      const parsedEvents = results.flat().map(row => {
+        const name = row['Name'];
+        const start = row['Published Start'];
+        const end = row['Published End'];
+
+        return {
+          text: name,
+          start: [start],
+          end: [end],
+          id: DayPilot.guid()
+        };
+      });
+
+      setEventButtons(
+        parsedEvents.map(event => (
+          <button
+            key={event.id}
+            style={styles.eventButton}
+            onClick={() => handleEventButtonClick(event)}
+          >
+            {event.text}
+          </button>
+        ))
+      );
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error loading events:", error);
+      setLoading(false);
+    }
   };
 
   const handleEventButtonClick = event => {
@@ -104,23 +121,22 @@ const Calendar = () => {
     }
   };
 
-  const handleShowEvents = () => {
-    setEventsVisible(true);
-  };
-
   return (
     <div style={styles.wrap}>
       <div style={styles.eventList}>
-        <input type="file" accept=".csv" onChange={handleFileChange} ref={fileInputRef} />
-        <button onClick={() => fileInputRef.current.click()}>Upload CSV</button>
-        <button onClick={handleShowEvents}>Show Events</button>
-        {eventsVisible && eventButtons}
+        <button onClick={handleFileChange}>Load CSV</button>
+        {loading ? (
+          <p>Loading events...</p>
+        ) : (
+          eventButtons.length > 0 ? (
+            eventButtons
+          ) : (
+            <p>No events loaded.</p>
+          )
+        )}
       </div>
       <div style={styles.main}>
-        <DayPilotCalendar
-          {...calendarConfig}
-          ref={calendarRef}
-        />
+        <DayPilotCalendar {...calendarConfig} ref={calendarRef} />
       </div>
     </div>
   );
