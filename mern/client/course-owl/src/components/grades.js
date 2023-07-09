@@ -29,6 +29,7 @@ import AccordionSummary from '@mui/material/AccordionSummary/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccordionDetails from '@mui/material/AccordionDetails/AccordionDetails';
 import * as d3 from 'd3'
+import { schemeset } from '../assets/grades';
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -40,29 +41,29 @@ const theme = createTheme({
 
 // npm install d3
 
-// let array = csv.split("\\n").map(function (line) {
-//     return line.split(",").splice(7,24);
-// });
-
-// console.log(array)
-
-// let array3 = []
-
-// let array2 = csv.split("\\n").forEach(function (line) {
-//     array3.push(line.split(",").splice(7,24))
-// })
-
-// console.log(array3)
-
 let array = csv.split("\n")
 let array2 = []
+let array3 = []
 
 array.forEach(function(line) {
     array2.push(line.split(",").slice(7,30).map(Number))
+    array3.push(line.split(","))
 })
 
-console.log('LOGGING ARRAY 2')
-console.log(array2)
+const attributeIndex = 31
+const groupedData = array3.reduce((groups, item) => {
+    const attribute = item[attributeIndex];
+    
+    if (!groups[attribute]) {
+      groups[attribute] = [];
+    }
+    
+    groups[attribute].push(item);
+    
+    return groups;
+  }, {});
+
+console.log(groupedData)
 
 export default function Grades() {
 
@@ -80,19 +81,20 @@ export default function Grades() {
 
     useEffect(() => {
 
-        console.log("GOT TO THIS USE STATE")
-
         courseData.forEach((course) => {
             const courseIndex = parseInt(course.Index)
-
-            console.log(courseIndex)
-
+           
             var data = array2[courseIndex]
+            
+            var count = 0
+            var count2 = 0
 
-            console.log(data)
+            data.forEach((item) => {
+                if (item > 0) {
+                    count += 1
+                }
+            })
 
-            console.log("LOGGING KEY")
-            console.log("svg" + course.Index)
             var svg = d3.select("#svg" + course.Index)
 
             let g = svg.append("g").attr("transform", "translate(150, 120)")
@@ -105,7 +107,12 @@ export default function Grades() {
 
             arcs.append("path").attr("fill", (data, i) => {
                 let value = data.data
-                return d3.schemeSet3[i];
+                if(value == 0) {
+                    return
+                }
+                let ind = Math.round((count2 / count) * schemeset.length)
+                count2 += 1
+                return schemeset[ind];
             }).attr("d", arc)
 
         })
@@ -121,25 +128,24 @@ export default function Grades() {
                         <ul style={{listStyleType: 'none'}}>
                             {courseData.map((course) => (
                                 <li style={{ paddingBottom: '2vh' }} key={course.Index}>
-                                    <Stack>
-                                        <svg width={"300"} height={"300"} id={"svg" + course.Index}></svg>
-                                        <Typography>{course.Course}</Typography>
+                                    <Stack width={"70vw"}>
+                                        <Accordion sx={{ bgcolor: "rgb(0, 174, 196, 0.3)" }} className='button-54'>
+                                            <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                            >
+                                                <Typography>{course.Course}: {course.Title}</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                                                    malesuada lacus ex, sit amet blandit leo lobortis eget.
+                                                </Typography>
+                                                <svg width={"300"} height={"300"} id={"svg" + course.Index}></svg>
+                                            </AccordionDetails>
+                                        </Accordion>
                                     </Stack>
-                                    {/* <Accordion sx={{ width: '80vw' }} elevation={3}>
-                                        <AccordionSummary sx={{ backgroundColor: 'rgb(219, 227, 236)' }}
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                        >
-                                            <Typography>{course.Course}: {course.Title}</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails sx={{ backgroundColor: 'rgb(219, 227, 236)' }}>
-                                            <svg width={"300"} height={"300"} key={"svg" + course.Index}></svg>
-                                            <Typography>
-                                                Instructor: {course.Instructor} A: {course.A} A-: {course['A-']}
-                                            </Typography>
-                                        </AccordionDetails>
-                                    </Accordion> */}
                                 </li>
                             ))}
                         </ul>
