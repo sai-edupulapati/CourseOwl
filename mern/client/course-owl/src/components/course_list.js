@@ -71,9 +71,41 @@ const groupedData2 = Object.entries(groupedData).slice(1)
 
 const groupedData3 = []
 groupedData2.forEach(function(courseInfo) {
+    const d2 = []
+    courseInfo[1].forEach(function(section) {
+        const tempData = {
+            instructor: section[6],
+            "A": section[7],
+            "A-": section[8],
+            "A+": section[9],
+            "AU": section[10],
+            "B": section[11],
+            "B-": section[12],
+            "B+": section[13],
+            "C": section[14],
+            "C-": section[15],
+            "C+": section[16],
+            "D": section[17],
+            "D-": section[18],
+            "D+": section[19],
+            "E": section[20],
+            "F": section[21],
+            "I": section[22],
+            "N": section[23],
+            "P": section[24],
+            "PI": section[25],
+            "S": section[26],
+            "SI": section[27],
+            "U": section[28],
+            "W": section[29],
+            "WF": section[30],
+        }
+        d2.push(tempData)
+    })
     const newArray = {
         course: courseInfo[0],
-        data: courseInfo[1]
+        data: courseInfo[1],
+        data2: d2
     }
     groupedData3.push(newArray)
 })
@@ -207,7 +239,7 @@ export default function CourseList() {
                                         malesuada lacus ex, sit amet blandit leo lobortis eget.
                                     </Typography>
                                     {courseInfo.data.map((section) => ((<svg width={"300"} height={"300"} id={"svg" + section[0]}></svg>)))}
-                                    <StackedBarChart data={data}></StackedBarChart>
+                                    <StackedBarChart data={courseInfo.data2}></StackedBarChart>
                                 </AccordionDetails>
                             </Accordion>
                         </Stack>

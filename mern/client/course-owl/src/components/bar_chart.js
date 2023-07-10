@@ -20,11 +20,13 @@ const StackedBarChart = ({ data }) => {
     // Define color scale
     const color = d3.scaleOrdinal()
       .domain(Object.keys(data[0]).slice(1))
-      .range(['#b5d4e9', '#5fa6d1', '#0f579f']);
+      .range(["#b5d4e9","#b4d3e9","#b2d3e8","#b1d2e8","#b0d1e7","#afd1e7","#add0e7","#acd0e6","#abcfe6","#a9cfe5",
+      "#a8cee5","#a7cde5","#a5cde4","#a4cce4","#a3cbe3","#a1cbe3","#a0cae3","#9ec9e2","#9dc9e2","#9cc8e1",
+      "#9ac7e1","#99c6e1","#97c6e0","#96c5e0"]);
 
     // Create x and y scales
     const xScale = d3.scaleBand()
-      .domain(data.map(d => d.category))
+      .domain(data.map(d => d.instructor))
       .range([0, innerWidth])
       .padding(0.1);
 
@@ -44,7 +46,7 @@ const StackedBarChart = ({ data }) => {
     barGroups.selectAll('rect')
       .data(d => d)
       .join('rect')
-      .attr('x', d => xScale(d.data.category))
+      .attr('x', d => xScale(d.data.instructor))
       .attr('y', d => yScale(d[1]))
       .attr('height', d => yScale(d[0]) - yScale(d[1]))
       .attr('width', xScale.bandwidth());
@@ -61,7 +63,7 @@ const StackedBarChart = ({ data }) => {
   }, [data]);
 
   return (
-    <svg ref={chartRef} width={500} height={300}></svg>
+    <svg ref={chartRef} width={1500} height={1500}></svg>
   );
 };
 
