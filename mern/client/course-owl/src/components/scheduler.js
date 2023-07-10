@@ -84,8 +84,8 @@ const Calendar = () => {
 
         return {
           text: name,
-          start: [start],
-          end: [end],
+          start: ["2023-10-03T12:00:00"],
+          end: ["2023-10-03T15:00:00"],
           id: DayPilot.guid()
         };
       });
@@ -112,15 +112,19 @@ const Calendar = () => {
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
     for (let i = 0; i < event.start.length; i++) {
+      const start = new Date(event.start[i]).toISOString();
+      const end = new Date(event.end[i]).toISOString();
+  
       dp.events.add({
-        start: event.start[i],
-        end: event.end[i],
+        start: start,
+        end: end,
         id: DayPilot.guid(),
         text: event.text
       });
     }
   };
-
+  
+  
   return (
     <div style={styles.wrap}>
       <div style={styles.eventList}>
