@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import "./CalendarStyles.css";
 import Papa from 'papaparse';
+import moment from 'moment';
 
 const styles = {
   wrap: {
@@ -24,6 +25,7 @@ const Calendar = () => {
 
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
+    startDate: "2023-10-02", // Set the calendar start date
     durationBarVisible: false,
     timeRangeSelectedHandling: "Enabled",
     onTimeRangeSelected: async args => {
@@ -79,13 +81,13 @@ const Calendar = () => {
       const results = await Promise.all(promises);
       const parsedEvents = results.flat().map(row => {
         const name = row['Name'];
-        const start = row['Published Start'];
-        const end = row['Published End'];
-
+        const startTime = moment(`10-03-2023 ${row['Published Start']}`, 'MM-DD-YYYY h:mma').format('YYYY-MM-DDTHH:mm:ss');
+        const endTime = moment(`10-03-2023 ${row['Published End']}`, 'MM-DD-YYYY h:mma').format('YYYY-MM-DDTHH:mm:ss');
+  
         return {
           text: name,
-          start: ["2023-10-03T12:00:00"],
-          end: ["2023-10-03T15:00:00"],
+          start: startTime,
+          end: endTime,
           id: DayPilot.guid()
         };
       });
@@ -111,20 +113,14 @@ const Calendar = () => {
 
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
-    for (let i = 0; i < event.start.length; i++) {
-      const start = new Date(event.start[i]).toISOString();
-      const end = new Date(event.end[i]).toISOString();
-  
-      dp.events.add({
-        start: start,
-        end: end,
-        id: DayPilot.guid(),
-        text: event.text
-      });
-    }
+    dp.events.add({
+      start: event.start,
+      end: event.end,
+      id: DayPilot.guid(),
+      text: event.text
+    });
   };
-  
-  
+
   return (
     <div style={styles.wrap}>
       <div style={styles.eventList}>
