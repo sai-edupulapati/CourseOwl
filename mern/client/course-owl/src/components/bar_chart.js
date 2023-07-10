@@ -63,7 +63,7 @@ const StackedBarChart = ({ data }) => {
   }, [data]);
 
   return (
-    <svg ref={chartRef} width={1500} height={1500}></svg>
+    <svg ref={chartRef} width={300} height={300}></svg>
   );
 };
 
