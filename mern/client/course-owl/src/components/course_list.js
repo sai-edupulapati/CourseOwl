@@ -110,6 +110,43 @@ export default function CourseList() {
         filterCourses();
     }, [query])  
 
+    useEffect(() => {
+        courseData.forEach(function(course) {
+            course.data.forEach((section) => {
+                const courseIndex = section[0]
+
+                var data = section.slice(7, 30)
+
+                var count = 0
+                var count2 = 0
+
+                data.forEach((item) => {
+                    if (item > 0) {
+                        count += 1
+                    }
+                })
+
+                var svg = d3.select("#svg" + courseIndex)
+                let g = svg.append("g").attr("transform", "translate(150, 120)")
+                
+                var pie = d3.pie()
+                var arc = d3.arc().innerRadius(0).outerRadius(100)
+                var arcs = g.selectAll("arc").data(pie(data)).enter().append("g")
+
+                arcs.append("path").attr("fill", (data, i) => {
+                    let value = data.data
+                    if(value == 0) {
+                        return
+                    }
+                    let ind = Math.round((count2 / count) * schemeset.length)
+                    count2 += 1
+                    return schemeset[ind];
+                }).attr("d", arc)
+                
+            })
+        })
+    }, [courseData])
+
     // useEffect(() => {
 
     //     courseData.forEach((course) => {
@@ -169,7 +206,7 @@ export default function CourseList() {
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
                                         malesuada lacus ex, sit amet blandit leo lobortis eget.
                                     </Typography>
-                                    <svg width={"300"} height={"300"} id={"svg"}></svg>
+                                    {courseInfo.data.map((section) => ((<svg width={"300"} height={"300"} id={"svg" + section[0]}></svg>)))}
                                     <StackedBarChart data={data}></StackedBarChart>
                                 </AccordionDetails>
                             </Accordion>
