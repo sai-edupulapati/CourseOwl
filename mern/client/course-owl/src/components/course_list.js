@@ -66,7 +66,7 @@ const groupedData = array3.reduce((groups, item) => {
     return groups;
   }, {});
 
-console.log(groupedData)
+//console.log(groupedData)
 const groupedData2 = Object.entries(groupedData).slice(1)
 
 const groupedData3 = []
@@ -222,7 +222,7 @@ export default function CourseList() {
         <Box>
             <TextField sx={{ width: '70vw'}} label="Enter Course" variant="standard" fullWidth onChange={(e) => (setQuery(e.target.value))}/>
             <ul style={{listStyleType: 'none'}}>
-                {courseData.map((courseInfo) => ((
+                {courseData.map((courseInfo, index) => ((
                     <li style={{ paddingBottom: '2vh' }}>
                         <Stack width={"70vw"}>
                             <Accordion sx={{ bgcolor: "rgb(0, 174, 196, 0.2)" }} className='button-54'>
@@ -239,7 +239,7 @@ export default function CourseList() {
                                         malesuada lacus ex, sit amet blandit leo lobortis eget.
                                     </Typography>
                                     {courseInfo.data.map((section) => ((<svg width={"300"} height={"300"} id={"svg" + section[0]}></svg>)))}
-                                    <StackedBarChart data={courseInfo.data2}></StackedBarChart>
+                                    <StackedBarChart data={courseInfo.data2} id={index}></StackedBarChart>
                                 </AccordionDetails>
                             </Accordion>
                         </Stack>

@@ -1,14 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const StackedBarChart = ({ data }) => {
-  const chartRef = useRef();
-
+const StackedBarChart = ({ data, id }) => {
+  const svgRef = useRef(null);
   useEffect(() => {
-    const svg = d3.select(chartRef.current);
+    const svg = d3.select(svgRef.current);
+    if (!svg.empty()) {
+      svg.selectAll("*").remove();
+    }
+    // const svg = d3.select("#svg_bar" + id);
     const width = +svg.attr('width');
     const height = +svg.attr('height');
-    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+    const margin = { top: 20, right: 20, bottom: 200, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -54,7 +57,12 @@ const StackedBarChart = ({ data }) => {
     // Add x-axis
     svg.append('g')
       .attr('transform', `translate(${margin.left},${height - margin.bottom})`)
-      .call(d3.axisBottom(xScale));
+      .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-0.8em")
+      .attr("dy", "0.15em")
+      .attr("transform", "rotate(-65)");;
 
     // Add y-axis
     svg.append('g')
@@ -63,7 +71,7 @@ const StackedBarChart = ({ data }) => {
   }, [data]);
 
   return (
-    <svg ref={chartRef} width={300} height={300}></svg>
+    <svg width={300} height={300} id={"svg_bar" + id} ref={svgRef}></svg>
   );
 };
 
