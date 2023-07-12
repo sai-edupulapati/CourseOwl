@@ -69,6 +69,25 @@ export default function MainLogin() {
             }
         }
     };
+
+    const handleGuest = async() => {
+        try {
+            const credentials = Realm.Credentials.anonymous();
+            await app.logIn(credentials);
+            console.log(app.currentUser.id);
+            navigate("/");
+        } catch (err) {
+            if (err instanceof Realm.MongoDBRealmError){
+                setText(err.error);                
+                setOpenSnackBar(true);
+            } else {
+                setText("Unkown error, please try again later");                
+                setOpenSnackBar(true); 
+            } 
+        }
+
+    }
+
     const handleLogin = () => {
         if (email!=="") {
             if (validEmail) {
@@ -90,6 +109,7 @@ export default function MainLogin() {
             setOpenSnackBar(true);
         }
     };
+
     const handleSnackbarClose = () => {
         setOpenSnackBar(false);
     }
@@ -154,7 +174,7 @@ export default function MainLogin() {
                             <Link color="#1e88e5" href="/register" underline="hover">
                                 Need an account? Register!
                             </Link>
-                            <Link color="#1e88e5" href="#" underline="hover">
+                            <Link color="#1e88e5" component="button" underline="hover" onClick={handleGuest}>
                                 Continue as Guest
                             </Link>
                     </Grid>
