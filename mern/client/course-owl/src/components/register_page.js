@@ -9,7 +9,10 @@ import * as React from 'react';
 import { FormControl } from '@mui/base';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import { useErrorAlert } from "../hooks/useErrorAlert";
+import * as Realm from "realm-web";
+import { useApp } from "./RealmApp";
+import { useNavigate } from 'react-router-dom';
 const styles = {
     box: {
         background: "radial-gradient(white,#e1f5fe)",
@@ -20,7 +23,6 @@ const styles = {
         },
         borderRadius : 4,
         width:400, 
-        // height : 600
     },
     icon : {
         width : 50,
@@ -37,7 +39,10 @@ const styles = {
         paddingRight : 3
     }
 };
+
 export default function Register() {
+    const navigate = useNavigate();
+    const app = useApp();
     const [showPassword, setShowPassword] = React.useState(false);
     const [showPassword2, setShowPassword2] = React.useState(false);
     const [password,setPassword] = React.useState("");
@@ -52,56 +57,81 @@ export default function Register() {
     }
     const [text,setText] = React.useState("");
     const [openSnackBar,setOpenSnackBar] = React.useState(false);
-    const [openSnackBar2,setOpenSnackBar2] = React.useState(false);
+    const [severity,setSeverity] = React.useState("info");
+  
+    async function onSubmit() {
+        try {
+            await app.emailPasswordAuth.registerUser({ email, password });
+            navigate('/login');
+        } catch (err) {
+            if (err instanceof Realm.MongoDBRealmError){
+                setSeverity("error");
+                setText(err.error);                
+                setOpenSnackBar(true);
+            } else {
+                setSeverity("error");
+                setText("Unkown error, please try again later");                
+                setOpenSnackBar(true); 
+            }
+        }  
+    }
+    
     React.useEffect(() =>  {
-        setValidEmail(/^\S+@\S+$/.test(email) ? true : false);
+        setValidEmail(((/^\S+@\S+$/.test(email)) || email==="") ? true : false);
     },[email]);
+    
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+    
     const handleRegister = () => {
         if (email!=="") {
             if (validEmail) {
                 if (password!=="") {
                     if (password2!=="") {
-                        // if (password==password2) {
-                          console.log(email,password,password2);
-                        // } else {
-                            
-                        // }
+                        if (password===password2) {
+                            onSubmit();
+                        } else {
+
+                            setText("Passwords do not match");
+                            setSeverity("error")
+                            setOpenSnackBar(true);    
+                        }
+
                     } else {
                         setText("Please confirm your password");
+                        setSeverity("info")
                         setOpenSnackBar(true);
                     }
                 } else {
                     setText("Please set your password");
+                    setSeverity("info")
                     setOpenSnackBar(true);
                 }
+
             } else {
-                    console.log("is alert already open:" + openSnackBar2)
-                    setOpenSnackBar2(true);
-                 console.log("is alert open after:" + openSnackBar2)
+                    setText("Invalid email")
+                    setSeverity("error")
+                    setOpenSnackBar(true);
 
             }
+
         } else {
+            setSeverity("info")
             setText("Please enter your email id");
             setOpenSnackBar(true);
         }
     };
-    const handleSnackbarClose =() => {
+    
+    const handleSnackbarClose = () => {
         setOpenSnackBar(false);
     }
+
     return (
         <CssBaseline>
-             {email!=="" && <Snackbar autoHideDuration={2000} anchorOrigin={{ vertical:"bottom", horizontal:"right" }} open={openSnackBar2}
-                onClose={()=>{setOpenSnackBar2(false) }}>
-                <Alert variant="outlined" severity="error">
-                    Invalid email
-                </Alert>
-            </Snackbar>}
             <Snackbar  autoHideDuration={2000} anchorOrigin={{ vertical:"bottom", horizontal:"right" }} open={openSnackBar}
                 onClose={handleSnackbarClose}>
-                <Alert variant="outlined" severity="info">
+                <Alert variant="outlined" severity={severity}>
                     {text}
                 </Alert>
             </Snackbar>

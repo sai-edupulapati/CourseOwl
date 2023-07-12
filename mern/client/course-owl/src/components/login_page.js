@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput } from '@mui/material';
+import { Alert, Button, Divider, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Snackbar } from '@mui/material';
 import { CssBaseline, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import { color, Container, Stack } from "@mui/system";
@@ -9,7 +9,10 @@ import * as React from 'react';
 import { FormControl } from '@mui/base';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import { useApp } from './RealmApp';
+import * as Realm from "realm-web";
+import { useErrorAlert } from "../hooks/useErrorAlert";
+import { useNavigate } from 'react-router-dom';
 const styles = {
     box: {
         background: "radial-gradient(white,#e1f5fe)",
@@ -20,7 +23,6 @@ const styles = {
         },
         borderRadius : 4,
         width:400, 
-        // height : 600
     },
     icon : {
         width : 50,
@@ -39,6 +41,8 @@ const styles = {
     }
 };
 export default function MainLogin() {
+    const app = useApp();
+    const navigate = useNavigate(); 
     const [showPassword, setShowPassword] = React.useState(false);
     const [email,setEmail] = React.useState("");
     const [password,setPassword] = React.useState("");
@@ -47,16 +51,62 @@ export default function MainLogin() {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-    const handleLogin = () => {
-        setValidEmail(/^\S+@\S+$/.test(email) ? true : false)
-        if (validEmail) {
-            console.log(email,password)
-        };
-        
+    const [text,setText] = React.useState("");
+    const [openSnackBar,setOpenSnackBar] = React.useState(false);
+    const [severity,setSeverity] = React.useState("info");
+    const handleSubmit = async() => {
+        try {
+            await app.logIn(Realm.Credentials.emailPassword(email, password) );
+            console.log(app.currentUser.id)
+            navigate("/");
+        } catch (err) {
+            if (err instanceof Realm.MongoDBRealmError){
+                setText(err.error);                
+                setOpenSnackBar(true);
+            } else {
+                setText("Unkown error, please try again later");                
+                setOpenSnackBar(true); 
+            }
+        }
     };
+    const handleLogin = () => {
+        if (email!=="") {
+            if (validEmail) {
+                if (password!=="") {
+                    handleSubmit();
+                } else {
+                    setText("Please type your password");
+                    setSeverity("info")
+                    setOpenSnackBar(true);
+                }
+            } else {
+                    setText("Invalid email")
+                    setSeverity("error")
+                    setOpenSnackBar(true);
+            }
+        } else {
+            setSeverity("info")
+            setText("Please enter your email id");
+            setOpenSnackBar(true);
+        }
+    };
+    const handleSnackbarClose = () => {
+        setOpenSnackBar(false);
+    }
+
+    React.useEffect(() =>  {
+        setValidEmail(((/^\S+@\S+$/.test(email)) || email==="") ? true : false);
+    },[email]);
     
+
     return (
         <CssBaseline>
+             <Snackbar autoHideDuration={2000} anchorOrigin={{ vertical:"bottom", horizontal:"right" }} open={openSnackBar}
+                onClose={handleSnackbarClose}>
+                <Alert variant="outlined" severity={severity}>
+                    {text}
+                </Alert>
+            </Snackbar>
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
                 <Box sx={{...styles.box} }>
                     <Container sx = {{...styles.container}} >
@@ -108,20 +158,11 @@ export default function MainLogin() {
                                 Continue as Guest
                             </Link>
                     </Grid>
-                    <Divider sx={styles.stack}> <Typography fontWeight={'bold'} variant="subtitle2">OR</Typography></Divider>
-                    {/* <Typography sx={styles.stack} color="#1e88e5" >Sign in using...</Typography> */}
-                    {/* <Grid paddingTop={3} paddingBottom={2} sx = {styles.stack} container direction="column" justifyContent="center" alignItems="center">
-                            <Link href="#" underline="hover">
-                                <Button size= "large" sx={{background:"white", color:"black"}} variant="outlined"><GoogleIcon color="black" paddingRight={3}/><span paddingLeft={3}>Google</span></Button>
-                            </Link>
-                            <Link  href="#" underline="hover">
-                                Continue as Guest
-                            </Link>
-                    </Grid> */}
-                   
+                    <Divider sx={styles.stack}> <Typography fontWeight={'bold'} variant="subtitle2">OR</Typography></Divider>                   
                 </Box>
             </Box>
         </CssBaseline >
 
     );
 };
+
