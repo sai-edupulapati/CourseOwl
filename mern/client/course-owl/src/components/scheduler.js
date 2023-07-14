@@ -12,10 +12,14 @@ const styles = {
     flexGrow: "1"
   },
   eventList: {
-    width: "200px",
-    padding: "10px"
+    flex: "0 0 200px",
+    padding: "10px",
+    height: "400px", // Set a fixed height
+    overflow: "auto" // Enable scrolling
   },
   eventButton: {
+    display: "block",
+    width: "100%",
     marginBottom: "5px"
   }
 };
@@ -153,7 +157,6 @@ const Calendar = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Calendar;
