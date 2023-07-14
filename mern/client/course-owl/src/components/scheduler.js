@@ -25,9 +25,11 @@ const Calendar = () => {
 
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
-    startDate: "2023-10-02", // Set the calendar start date
-    durationBarVisible: false,
+    startDate: "2023-10-02",
+    durationBarVisible: true, // Show the duration bar
+    cellDuration: 5, // Set the cell duration to 5 minutes
     timeRangeSelectedHandling: "Enabled",
+    durationBarWidth: 1000,
     onTimeRangeSelected: async args => {
       const dp = calendarRef.current.control;
       const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
@@ -37,7 +39,8 @@ const Calendar = () => {
         start: args.start,
         end: args.end,
         id: DayPilot.guid(),
-        text: modal.result
+        text: modal.result,
+        durationBarWidth: 1000
       });
     },
     eventDeleteHandling: "Update",
@@ -88,7 +91,8 @@ const Calendar = () => {
           text: name,
           start: startTime,
           end: endTime,
-          id: DayPilot.guid()
+          id: DayPilot.guid(),
+          durationBarWidth: 1000
         };
       });
 
@@ -113,16 +117,28 @@ const Calendar = () => {
 
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
+    const start = moment(event.start);
+    const end = moment(event.end);
+  
     dp.events.add({
-      start: event.start,
-      end: event.end,
+      start: start.format('YYYY-MM-DDTHH:mm:ss'),
+      end: end.format('YYYY-MM-DDTHH:mm:ss'),
       id: DayPilot.guid(),
-      text: event.text
+      text: event.text,
+      durationBarWidth: "10000000px"
     });
   };
 
   return (
     <div style={styles.wrap}>
+      <div style={styles.main}>
+        <h1>Schedule Builder</h1> {/* Added heading */}
+        <DayPilotCalendar
+          {...calendarConfig}
+          ref={calendarRef}
+          durationBarWidth={1590} // Adjust the width value as needed
+        />
+      </div>
       <div style={styles.eventList}>
         <button onClick={handleFileChange}>Load CSV</button>
         {loading ? (
@@ -135,11 +151,9 @@ const Calendar = () => {
           )
         )}
       </div>
-      <div style={styles.main}>
-        <DayPilotCalendar {...calendarConfig} ref={calendarRef} />
-      </div>
     </div>
   );
+  
 };
 
 export default Calendar;
