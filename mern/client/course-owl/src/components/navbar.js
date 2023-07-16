@@ -93,7 +93,7 @@ export default function NavBar() {
           <div style={boxStyle}>
           {/* Added a box to properly pad */}
           </div>
-          <button className="button-54">Log In</button>
+          <button className='button-54' onClick={() => {window.location.href = '/login'}}>Log In</button>
         </ThemeProvider>
       </Toolbar>
       <Backdrop open={Boolean(anchorEl)} sx={{ zIndex: 1 }}>
