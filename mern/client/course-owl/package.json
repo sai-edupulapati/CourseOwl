@@ -17,7 +17,11 @@
     "fs": "^0.0.1-security",
     "moment": "^2.29.4",
     "papaparse": "^5.4.1",
+    "chart.js": "^4.3.0",
+    "core-js": "^3.31.0",
+    "d3": "^7.8.5",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
