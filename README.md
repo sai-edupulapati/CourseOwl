@@ -17,3 +17,12 @@ Purpose: Create a multipurpose application for college students to plan courses/
 - Given that they have created an account, have the ability to join chat rooms for each specific course/section
 - Given that they have created an account, have the ability to make a personalised schedule
 - Given that they have made a schedule, give a rating/feedback on difficulty of schedule, projected GPA, etc.
+
+
+# Minor Tasklist
+- Fix button resizing issue in navbar
+- Fix background blur bug in navbar
+- _Issues With Grades Page:_
+    - Graphs showing professor performance across all sections needs to be fixed (too small right now)
+    - Pie charts still need labels and need to be organized more properly
+    - Probably address the color scheme issues as well?
