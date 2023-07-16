@@ -21,7 +21,6 @@ function App() {
         <Route path="/scheduler" element={<Scheduler />} />
         <Route path="/navbar" element={<NavBar />} />
         <Route path='/grades' element={<Grades />} />
-        <Route path='/grades' element={<Grades />} />
       </Routes>
     </BrowserRouter>
 
