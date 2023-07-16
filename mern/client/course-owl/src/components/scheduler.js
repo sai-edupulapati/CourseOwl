@@ -96,22 +96,38 @@ const Calendar = () => {
       const results = await Promise.all(promises);
       const parsedEvents = results.flat().map(row => {
         const name = row['Name'];
-        const dayOfWeek = row['Day Of Week'];
-        const date = dayOfWeekToDateString[dayOfWeek];
-        const startTime = moment(`${date} ${row['Published Start']}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
-        const endTime = moment(`${date} ${row['Published End']}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
+        const daysOfWeek = row['Day Of Week'].split(' ');
+         // Split the days by spaces
+        console.log(daysOfWeek);
+        const startTime = row['Published Start'];
+        const endTime = row['Published End'];
   
-        return {
-          text: name,
-          start: startTime,
-          end: endTime,
-          id: DayPilot.guid(),
-          durationBarWidth: 1000
-        };
+        // Create an array of events, each with a different day of the week and time
+        const events = daysOfWeek.map(dayOfWeek => {
+          const date = dayOfWeekToDateString[dayOfWeek];
+          const startDateTime = moment(`${date} ${startTime}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
+          const endDateTime = moment(`${date} ${endTime}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
+  
+          return {
+            text: name,
+            start: startDateTime,
+            end: endDateTime,
+            id: DayPilot.guid(),
+            durationBarWidth: 1000,
+            day: dayOfWeek
+          };
+        });
+
+        console.log(events);
+  
+        return events;
       });
   
+      // Flatten the array of arrays into a single array of events
+      const flattenedEvents = parsedEvents.flat();
+  
       setEventButtons(
-        parsedEvents.map(event => (
+        flattenedEvents.map(event => (
           <button
             key={event.id}
             style={styles.eventButton}
@@ -135,14 +151,42 @@ const Calendar = () => {
     const start = moment(event.start);
     const end = moment(event.end);
   
-    dp.events.add({
-      start: start.format('YYYY-MM-DDTHH:mm:ss'),
-      end: end.format('YYYY-MM-DDTHH:mm:ss'),
-      id: DayPilot.guid(),
-      text: event.text,
-      durationBarWidth: "10000000px"
+    // Check if the event has the correct property for the days of the week
+    if (!event.hasOwnProperty('day')) {
+      console.error('Event does not have a "day" property.');
+      return;
+    }
+  
+    // Define the local mapping for days of the week
+    const dayOfWeekToDateString = {
+      M: "2023-10-02",
+      T: "2023-10-03",
+      W: "2023-10-04",
+      Th: "2023-10-05",
+      F: "2023-10-05",
+    };
+  
+    // Get the days of the week from the event data
+    const daysOfWeek = event.day.split(' ');
+  
+    // Iterate through each day of the week and add the event to the calendar
+    daysOfWeek.forEach(dayOfWeek => {
+      const date = dayOfWeekToDateString[dayOfWeek];
+      const dayStart = moment(`${date} ${start.format('HH:mm')}`, 'YYYY-MM-DD HH:mm');
+      const dayEnd = moment(`${date} ${end.format('HH:mm')}`, 'YYYY-MM-DD HH:mm');
+  
+      dp.events.add({
+        start: dayStart.format('YYYY-MM-DDTHH:mm:ss'),
+        end: dayEnd.format('YYYY-MM-DDTHH:mm:ss'),
+        id: DayPilot.guid(),
+        text: event.text,
+        durationBarWidth: "10000000px"
+      });
     });
   };
+  
+  
+
 
   return (
     <div style={styles.wrap}>
@@ -171,3 +215,5 @@ const Calendar = () => {
 };
 
 export default Calendar;
+
+
