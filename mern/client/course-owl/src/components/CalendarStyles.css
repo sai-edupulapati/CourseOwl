@@ -1,16 +1,15 @@
 /* calendar event */
 .calendar_default_event_inner {
-    background: rgb(254, 254, 254);
+    background: rgba(254, 254, 254, 0.5); /* Use RGBA value with alpha set to 0.5 for 50% transparency */
     color: rgb(10, 1, 1);
     border: none;
     border-radius: 5px;
     font-size: 10pt;
-    padding: 20px 30px; /* Adjust the top (20px) and left (40px) padding as per your requirement */
-    opacity: 0.8;
+    padding: 7px 30px; /* Adjust the top (20px) and left (40px) padding as per your requirement */
 }
 
 /* outer duration bar box, uses full height, light blue */
 .calendar_default_event_bar { top: 0px; bottom: 0px; left: 0px; width: 0px; background-color: #944042; }
 
 /* inner duration bar box, displays the duration, dark blue */
-.calendar_default_event_bar_inner { position: absolute; width: 10px; background-color: #dd3210; }
+.calendar_default_event_bar_inner { position: absolute; width: 20px; background-color: #dd3210; }
