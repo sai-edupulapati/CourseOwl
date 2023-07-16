@@ -8,7 +8,11 @@ import { BrowserRouter } from 'react-router-dom';
 import Register from './components/register_page';
 import { ThemeProvider } from '@emotion/react';
 import { AppProvider } from './components/RealmApp';
+import NavBar from './components/navbar';
+import Scheduler from './components/scheduler';
+import Grades from './components/grades';
 const { appId } = atlasConfig;
+
 
 export default function ProvidedApp() {
   return (
@@ -29,6 +33,9 @@ function App() {
         <Route path='/' element={<ButtonAppBar /> } />
         <Route path='/login' element={<MainLogin />} />
         <Route path='/register' element={<Register />} /> 
+        <Route path="/scheduler" element={<Scheduler />} />
+        <Route path="/navbar" element={<NavBar />} />
+        <Route path='/grades' element={<Grades />} />
         </Routes>
     </BrowserRouter>
   );
