@@ -4,6 +4,8 @@ import "./loadEnvironment.mjs";
 import records from "./routes/record.mjs";
 import users from "./routes/users.mjs"
 
+// hi
+
 const PORT = process.env.PORT || 5050;
 const app = express();
 
@@ -15,3 +17,5 @@ app.use("/record", records);
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
+
+// Hello
