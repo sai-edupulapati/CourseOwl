@@ -67,9 +67,17 @@ const Calendar = () => {
       "/events.csv", // Assuming the file is in the public directory
       "/eventsCS.csv"
     ];
-
+  
     setLoading(true);
-
+  
+    const dayOfWeekToDateString = {
+      M: "2023-10-02",
+      T: "2023-10-03",
+      W: "2023-10-04",
+      Th: "2023-10-05",
+      F: "2023-10-05",
+    };
+  
     const promises = filePaths.map(filePath => {
       return fetch(filePath)
         .then(response => response.text())
@@ -83,13 +91,15 @@ const Calendar = () => {
           });
         });
     });
-
+  
     try {
       const results = await Promise.all(promises);
       const parsedEvents = results.flat().map(row => {
         const name = row['Name'];
-        const startTime = moment(`10-03-2023 ${row['Published Start']}`, 'MM-DD-YYYY h:mma').format('YYYY-MM-DDTHH:mm:ss');
-        const endTime = moment(`10-03-2023 ${row['Published End']}`, 'MM-DD-YYYY h:mma').format('YYYY-MM-DDTHH:mm:ss');
+        const dayOfWeek = row['Day Of Week'];
+        const date = dayOfWeekToDateString[dayOfWeek];
+        const startTime = moment(`${date} ${row['Published Start']}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
+        const endTime = moment(`${date} ${row['Published End']}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
   
         return {
           text: name,
@@ -99,7 +109,7 @@ const Calendar = () => {
           durationBarWidth: 1000
         };
       });
-
+  
       setEventButtons(
         parsedEvents.map(event => (
           <button
@@ -111,13 +121,14 @@ const Calendar = () => {
           </button>
         ))
       );
-
+  
       setLoading(false);
     } catch (error) {
       console.error("Error loading events:", error);
       setLoading(false);
     }
   };
+  
 
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
