@@ -17,6 +17,7 @@ function App() {
         <Route path='/' element={<ButtonAppBar />}></Route>
         <Route path="/scheduler" element={<Scheduler />} />
         <Route path="/navbar" element={<NavBar />} />
+        <Route path='/grades' element={<Grades />} />
       </Routes>
     </BrowserRouter>
 
