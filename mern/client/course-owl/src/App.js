@@ -5,6 +5,7 @@ import ButtonAppBar from './components/landing_page';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from './components/navbar';
 import Scheduler from './components/scheduler';
+import Grades from './components/grades';
 
 
 // import ReactDOM from "react-dom/client";
