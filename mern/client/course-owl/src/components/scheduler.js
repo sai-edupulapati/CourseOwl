@@ -96,7 +96,23 @@ const Calendar = () => {
       const results = await Promise.all(promises);
       const parsedEvents = results.flat().map(row => {
         const name = row['Name'];
-        const daysOfWeek = row['Day Of Week'].split(' '); // Split the days by spaces
+
+
+        const daysOfWeekString = row['Day Of Week'];
+
+        // Split the days of the week by 2 characters at a time and account for 'Th'
+        const daysOfWeek = [];
+        for (let i = 0; i < daysOfWeekString.length; i += 2) {
+          if (daysOfWeekString[i + 1] === 'h') {
+            daysOfWeek.push(daysOfWeekString.substr(i, 2));
+          } else {
+            daysOfWeek.push(daysOfWeekString[i]);
+            i--;
+          }
+        }
+        console.log(daysOfWeek);
+
+
         const startTime = row['Published Start'];
         const endTime = row['Published End'];
   
