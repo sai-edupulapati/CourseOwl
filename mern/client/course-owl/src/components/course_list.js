@@ -126,7 +126,7 @@ groupedData3.forEach(function(courseInfo) {
     })
     courseInfo.data = newdatafull
 })
-console.log(groupedData3)
+//console.log(groupedData3)
 
 
 export default function CourseList() {
