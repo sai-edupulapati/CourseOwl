@@ -1,5 +1,4 @@
 import { MongoClient } from "mongodb";
-
 const connectionString = process.env.ATLAS_URI || "";
 
 const client = new MongoClient(connectionString);
@@ -11,6 +10,6 @@ try {
   console.error(e);
 }
 
-let db = conn.db("sample_training");
+let db = conn.db("Course_Data");
 
 export default db;
