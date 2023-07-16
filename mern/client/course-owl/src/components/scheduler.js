@@ -96,38 +96,23 @@ const Calendar = () => {
       const results = await Promise.all(promises);
       const parsedEvents = results.flat().map(row => {
         const name = row['Name'];
-        const daysOfWeek = row['Day Of Week'].split(' ');
-         // Split the days by spaces
-        console.log(daysOfWeek);
+        const daysOfWeek = row['Day Of Week'].split(' '); // Split the days by spaces
         const startTime = row['Published Start'];
         const endTime = row['Published End'];
   
-        // Create an array of events, each with a different day of the week and time
-        const events = daysOfWeek.map(dayOfWeek => {
-          const date = dayOfWeekToDateString[dayOfWeek];
-          const startDateTime = moment(`${date} ${startTime}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
-          const endDateTime = moment(`${date} ${endTime}`, 'YYYY-MM-DD h:mma').format('YYYY-MM-DDTHH:mm:ss');
-  
-          return {
-            text: name,
-            start: startDateTime,
-            end: endDateTime,
-            id: DayPilot.guid(),
-            durationBarWidth: 1000,
-            day: dayOfWeek
-          };
-        });
-
-        console.log(events);
-  
-        return events;
+        // Create a single event object for all days of the week
+        return {
+          text: name,
+          daysOfWeek,
+          start: startTime,
+          end: endTime,
+          id: DayPilot.guid(),
+          durationBarWidth: 1000,
+        };
       });
   
-      // Flatten the array of arrays into a single array of events
-      const flattenedEvents = parsedEvents.flat();
-  
       setEventButtons(
-        flattenedEvents.map(event => (
+        parsedEvents.map(event => (
           <button
             key={event.id}
             style={styles.eventButton}
@@ -148,14 +133,8 @@ const Calendar = () => {
 
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
-    const start = moment(event.start);
-    const end = moment(event.end);
-  
-    // Check if the event has the correct property for the days of the week
-    if (!event.hasOwnProperty('day')) {
-      console.error('Event does not have a "day" property.');
-      return;
-    }
+    const start = moment(event.start, 'h:mma');
+    const end = moment(event.end, 'h:mma');
   
     // Define the local mapping for days of the week
     const dayOfWeekToDateString = {
@@ -163,11 +142,11 @@ const Calendar = () => {
       T: "2023-10-03",
       W: "2023-10-04",
       Th: "2023-10-05",
-      F: "2023-10-05",
+      F: "2023-10-06",
     };
   
     // Get the days of the week from the event data
-    const daysOfWeek = event.day.split(' ');
+    const daysOfWeek = event.daysOfWeek;
   
     // Iterate through each day of the week and add the event to the calendar
     daysOfWeek.forEach(dayOfWeek => {
@@ -184,6 +163,8 @@ const Calendar = () => {
       });
     });
   };
+  
+  
   
   
 
