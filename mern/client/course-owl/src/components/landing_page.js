@@ -19,7 +19,10 @@ import ControlledAccordions from './faq_dropdown';
 import github from '../assets/github.png'
 import linkedin from '../assets/in.png'
 import NavBar from './navbar'
-import NavB from './scheduler';
+import NavB from './scheduler'
+
+import { useApp } from './RealmApp';
+import * as Realm from "realm-web";
 
 const font = "'Belanosima', sans-serif"
 const theme = createTheme({
@@ -49,6 +52,12 @@ const styles = {
 };
 
 export default function ButtonAppBar() {
+  const app = useApp();
+  if (app.currentUser) {
+    console.log(app.currentUser.id);
+  } else {
+    console.log("No user");
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Paper style={styles.paperContainer} sx={{height: "90vh", paddingTop: "15px"}} elevation={0}>

@@ -12,6 +12,8 @@ import Image from '../assets/home51.jpg';
 import logo from '../assets/owl.png';
 import Stack from '@mui/material/Stack';
 
+import { useApp } from './RealmApp';
+
 const font = "'Belanosima', sans-serif";
 const theme = createTheme({
   typography: {
@@ -42,6 +44,19 @@ const styles = {
 };
 
 export default function NavBar() {
+
+  const app = useApp();
+
+  const handleLogout = async () => {
+    if (app.currentUser) {
+      await app.currentUser.logOut();
+      console.log("Log out done");
+      // Additional logic after logging out the user
+    } else {
+      console.log("No user is currently logged in");
+    }
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -67,11 +82,12 @@ export default function NavBar() {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction="row" spacing={2}>
-            <Button
+            <Button  
               color="inherit"
               aria-haspopup="true"
-              onClick={handleClick}
+              onClick={handleLogout}
               sx={{ pl: 2, pr: 2 }}
+              
             >
               Menu Item 1
             </Button>
