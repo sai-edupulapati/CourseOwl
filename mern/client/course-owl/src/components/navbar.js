@@ -11,6 +11,8 @@ import { ThemeContext, ThemeProvider } from '@emotion/react';
 import Image from '../assets/home51.jpg';
 import logo from '../assets/owl.png';
 import Stack from '@mui/material/Stack';
+import { useApp } from './RealmApp';
+import { useState, useEffect } from 'react';
 
 const font = "'Belanosima', sans-serif";
 const theme = createTheme({
@@ -43,6 +45,18 @@ const styles = {
 
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const app = useApp()
+
+  const [buttonText, setButtonText] = useState("Log In")
+
+  useEffect(() => {
+    if (app.currentUser.id != "") {
+      console.log(app.currentUser.id)
+      setButtonText("Log Out")
+    } else {
+      setButtonText("Log In")
+    }
+  }, [])  
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +70,15 @@ export default function NavBar() {
     paddingLeft: '20px',
     paddingRight: '10px'
   };
+
+  const handleSubmit = async () => {
+    if (app.currentUser.id != "") {
+      await app.logOut()
+      window.location.href("/")
+    } else {
+      window.location.href("/login")
+    }
+  }
 
   return (
     <AppBar position="static" color="transparent" elevation={0}>
@@ -95,7 +118,7 @@ export default function NavBar() {
           <div style={boxStyle}>
           {/* Added a box to properly pad */}
           </div>
-          <button className='button-54' onClick={() => {window.location.href = '/login'}}>Log In</button>
+          <button className='button-54' onClick={handleSubmit}>{buttonText}</button>
         </ThemeProvider>
       </Toolbar>
       <Backdrop open={Boolean(anchorEl)} sx={{ zIndex: 1 }}>
