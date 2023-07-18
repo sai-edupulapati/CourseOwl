@@ -13,6 +13,7 @@ import logo from '../assets/owl.png';
 import Stack from '@mui/material/Stack';
 import { useApp } from './RealmApp';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const font = "'Belanosima', sans-serif";
 const theme = createTheme({
@@ -46,17 +47,18 @@ const styles = {
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const app = useApp()
+  const navigate = useNavigate();
 
   const [buttonText, setButtonText] = useState("Log In")
 
   useEffect(() => {
-    if (app.currentUser.id != "") {
+    if (app.currentUser) {
       console.log(app.currentUser.id)
       setButtonText("Log Out")
     } else {
       setButtonText("Log In")
     }
-  }, [])  
+  }, [app.currentUser])  
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -72,11 +74,13 @@ export default function NavBar() {
   };
 
   const handleSubmit = async () => {
-    if (app.currentUser.id != "") {
-      await app.logOut()
-      window.location.href("/")
+    if (app.currentUser) {
+      await app.logOut();
+      console.log("LOGGED OUT")
+//      window.location.href("/");
+      navigate('/')
     } else {
-      window.location.href("/login")
+      navigate('/login')
     }
   }
 
