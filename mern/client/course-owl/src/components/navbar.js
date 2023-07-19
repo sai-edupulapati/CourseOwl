@@ -76,8 +76,6 @@ export default function NavBar() {
   const handleSubmit = async () => {
     if (app.currentUser) {
       await app.logOut();
-      console.log("LOGGED OUT")
-//      window.location.href("/");
       navigate('/')
     } else {
       navigate('/login')
