@@ -89,7 +89,7 @@ export default function NavBar() {
               sx={{ pl: 2, pr: 2 }}
               
             >
-              Menu Item 1
+              Log Out 
             </Button>
             <Button
               color="inherit"

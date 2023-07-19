@@ -179,11 +179,6 @@ const Calendar = () => {
       });
     });
   };
-  
-  
-  
-  
-
 
   return (
     <div style={styles.wrap}>
