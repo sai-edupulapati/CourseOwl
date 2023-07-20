@@ -4,6 +4,9 @@ import "./CalendarStyles.css";
 import Papa from 'papaparse';
 import moment from 'moment';
 
+import { useApp } from './RealmApp';
+import * as Realm from "realm-web";
+
 const styles = {
   wrap: {
     display: "flex"
@@ -263,3 +266,5 @@ const Calendar = () => {
 };
 
 export default Calendar;
+
+// add a submit button to get the dp.events.list log to see what all has been selected by the user
