@@ -11,6 +11,7 @@ import { AppProvider } from './components/RealmApp';
 import NavBar from './components/navbar';
 import Scheduler from './components/scheduler';
 import Grades from './components/grades';
+import ChatRoomSelector from './components/chat_room';
 const { appId } = atlasConfig;
 
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/scheduler" element={<Scheduler />} />
         <Route path="/navbar" element={<NavBar />} />
         <Route path='/grades' element={<Grades />} />
+        <Route path='/chat' element={<ChatRoomSelector />} />
         </Routes>
     </BrowserRouter>
   );
