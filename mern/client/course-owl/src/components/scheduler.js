@@ -62,6 +62,9 @@ const Calendar = () => {
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [loadedEvents, setLoadedEvents] = useState([]);
+
+
   const handleFileChange = async () => {
     const filePaths = [
       "/events.csv", // Assuming the file is in the public directory
@@ -138,6 +141,8 @@ const Calendar = () => {
           </button>
         ))
       );
+
+      setLoadedEvents(parsedEvents);
   
       setLoading(false);
     } catch (error) {
@@ -180,14 +185,35 @@ const Calendar = () => {
     });
   };
 
+  const handleEventDelete = args => {
+    const dp = calendarRef.current.control;
+    const eventToDelete = args.e;
+
+    // Find the button information corresponding to the event's button
+    const buttonInfo = eventButtons.find(info => info.buttonId === eventToDelete.data.buttonId);
+
+    if (buttonInfo) {
+      // Remove all events associated with the same button from the calendar
+      buttonInfo.events.forEach(event => {
+        dp.events.remove(event);
+      });
+
+      // Remove the button information from the state
+      setEventButtons(prevState => prevState.filter(info => info.buttonId !== eventToDelete.data.buttonId));
+    }
+  };
+
   return (
     <div style={styles.wrap}>
       <div style={styles.main}>
-        <h1>Schedule Builder</h1> {/* Added heading */}
+        <h1>Schedule Builder</h1>
         <DayPilotCalendar
           {...calendarConfig}
           ref={calendarRef}
-          durationBarWidth={1590} // Adjust the width value as needed
+          durationBarWidth={1590}
+          // Attach the eventDeleteHandling and onEventDelete properties
+          eventDeleteHandling="Update"
+          onEventDelete={handleEventDelete}
         />
       </div>
       <div style={styles.eventList}>
@@ -195,8 +221,26 @@ const Calendar = () => {
         {loading ? (
           <p>Loading events...</p>
         ) : (
-          eventButtons.length > 0 ? (
-            eventButtons
+          loadedEvents.length > 0 ? (
+            loadedEvents.map(event => (
+              <div key={event.id}>
+                <button
+                  style={styles.eventButton}
+                  onClick={() => handleEventButtonClick(event)}
+                >
+                  {event.text}
+                </button>
+                <button
+                  onClick={() => {
+                    const dp = calendarRef.current.control;
+                    dp.events.remove(event);
+                    setLoadedEvents(prevState => prevState.filter(e => e.id !== event.id));
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            ))
           ) : (
             <p>No events loaded.</p>
           )
@@ -207,5 +251,4 @@ const Calendar = () => {
 };
 
 export default Calendar;
-
 
