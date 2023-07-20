@@ -62,9 +62,6 @@ const Calendar = () => {
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [loadedEvents, setLoadedEvents] = useState([]);
-
-
   const handleFileChange = async () => {
     const filePaths = [
       "/events.csv", // Assuming the file is in the public directory
@@ -141,8 +138,6 @@ const Calendar = () => {
           </button>
         ))
       );
-
-      setLoadedEvents(parsedEvents);
   
       setLoading(false);
     } catch (error) {
@@ -156,7 +151,7 @@ const Calendar = () => {
     const dp = calendarRef.current.control;
     const start = moment(event.start, 'h:mma');
     const end = moment(event.end, 'h:mma');
-  
+
     // Define the local mapping for days of the week
     const dayOfWeekToDateString = {
       M: "2023-10-02",
@@ -165,55 +160,51 @@ const Calendar = () => {
       Th: "2023-10-05",
       F: "2023-10-06",
     };
-  
+
     // Get the days of the week from the event data
     const daysOfWeek = event.daysOfWeek;
-  
+
+    // Generate a unique ID for the origin button
+    const originButtonId = DayPilot.guid();
+
     // Iterate through each day of the week and add the event to the calendar
     daysOfWeek.forEach(dayOfWeek => {
       const date = dayOfWeekToDateString[dayOfWeek];
       const dayStart = moment(`${date} ${start.format('HH:mm')}`, 'YYYY-MM-DD HH:mm');
       const dayEnd = moment(`${date} ${end.format('HH:mm')}`, 'YYYY-MM-DD HH:mm');
-  
+
       dp.events.add({
         start: dayStart.format('YYYY-MM-DDTHH:mm:ss'),
         end: dayEnd.format('YYYY-MM-DDTHH:mm:ss'),
         id: DayPilot.guid(),
         text: event.text,
-        durationBarWidth: "10000000px"
+        durationBarWidth: "10000000px",
+        originButtonId: originButtonId, // Add the ID of the origin button to the event data
       });
     });
   };
 
-  const handleEventDelete = args => {
+  const handleEventDelete = async args => {
     const dp = calendarRef.current.control;
-    const eventToDelete = args.e;
+    const e = args.e;
+    const originButtonId = e.data.originButtonId;
 
-    // Find the button information corresponding to the event's button
-    const buttonInfo = eventButtons.find(info => info.buttonId === eventToDelete.data.buttonId);
-
-    if (buttonInfo) {
-      // Remove all events associated with the same button from the calendar
-      buttonInfo.events.forEach(event => {
+    // Find all events with the same origin button ID and remove them
+    dp.events.all().forEach(event => {
+      if (event.data.originButtonId === originButtonId) {
         dp.events.remove(event);
-      });
-
-      // Remove the button information from the state
-      setEventButtons(prevState => prevState.filter(info => info.buttonId !== eventToDelete.data.buttonId));
-    }
+      }
+    });
   };
 
   return (
     <div style={styles.wrap}>
       <div style={styles.main}>
-        <h1>Schedule Builder</h1>
+        <h1>Schedule Builder</h1> {/* Added heading */}
         <DayPilotCalendar
           {...calendarConfig}
           ref={calendarRef}
-          durationBarWidth={1590}
-          // Attach the eventDeleteHandling and onEventDelete properties
-          eventDeleteHandling="Update"
-          onEventDelete={handleEventDelete}
+          durationBarWidth={1590} // Adjust the width value as needed
         />
       </div>
       <div style={styles.eventList}>
@@ -221,26 +212,8 @@ const Calendar = () => {
         {loading ? (
           <p>Loading events...</p>
         ) : (
-          loadedEvents.length > 0 ? (
-            loadedEvents.map(event => (
-              <div key={event.id}>
-                <button
-                  style={styles.eventButton}
-                  onClick={() => handleEventButtonClick(event)}
-                >
-                  {event.text}
-                </button>
-                <button
-                  onClick={() => {
-                    const dp = calendarRef.current.control;
-                    dp.events.remove(event);
-                    setLoadedEvents(prevState => prevState.filter(e => e.id !== event.id));
-                  }}
-                >
-                  X
-                </button>
-              </div>
-            ))
+          eventButtons.length > 0 ? (
+            eventButtons
           ) : (
             <p>No events loaded.</p>
           )
