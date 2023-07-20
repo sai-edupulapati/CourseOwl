@@ -120,7 +120,7 @@ const Calendar = () => {
     const dp = calendarRef.current.control;
     const start = moment(event.start, 'h:mma');
     const end = moment(event.end, 'h:mma');
-
+  
     // Define the local mapping for days of the week
     const dayOfWeekToDateString = {
       M: "2023-10-02",
@@ -129,40 +129,79 @@ const Calendar = () => {
       Th: "2023-10-05",
       F: "2023-10-06",
     };
-
+  
     // Get the days of the week from the event data
     const daysOfWeek = event.daysOfWeek;
-
+  
     // Generate a unique ID for the origin button
     const originButtonId = DayPilot.guid();
-
+  
     // Iterate through each day of the week and add the event to the calendar
     daysOfWeek.forEach(dayOfWeek => {
       const date = dayOfWeekToDateString[dayOfWeek];
       const dayStart = moment(`${date} ${start.format('HH:mm')}`, 'YYYY-MM-DD HH:mm');
       const dayEnd = moment(`${date} ${end.format('HH:mm')}`, 'YYYY-MM-DD HH:mm');
-
+  
       dp.events.add({
         start: dayStart.format('YYYY-MM-DDTHH:mm:ss'),
         end: dayEnd.format('YYYY-MM-DDTHH:mm:ss'),
         id: DayPilot.guid(),
         text: event.text,
         durationBarWidth: "10000000px",
-        originButtonId: originButtonId, // Add the ID of the origin button to the event data
+        originButtonId: originButtonId,
       });
     });
+  
+    // Update the events state with the new event
+    setEvents(prevEvents => [
+      ...prevEvents,
+      {
+        start: start.format('YYYY-MM-DDTHH:mm:ss'),
+        end: end.format('YYYY-MM-DDTHH:mm:ss'),
+        id: DayPilot.guid(),
+        text: event.text,
+        durationBarWidth: "10000000px",
+        originButtonId: originButtonId,
+      }
+    ]);
   };
+  
+
+
 
   const handleEventDelete = async args => {
+
     const dp = calendarRef.current.control;
     const e = args.e;
     const originButtonId = e.data.originButtonId;
 
-    // Remove the event from the state
-    setEvents(prevEvents => prevEvents.filter(event => event.data.originButtonId !== originButtonId));
-    
-    dp.events.remove(e);
-  };
+    console.log(dp.event)
+
+    // Create a new array without events with matching originButtonId
+    const updatedEvents = [];
+    for (let i = 0; i < dp.events.list.length; i++) {
+        const event = dp.events.list[i];
+        if (event.originButtonId !== originButtonId) {
+            console.log(event)
+            updatedEvents.push(event);
+        }
+    }
+
+    updatedEvents.push([])
+
+
+
+    // Update the dp.events.list with the modified events list
+    calendarRef.current.control.events.list = updatedEvents;
+
+    console.log(calendarRef.current.control.events.list)
+
+    // Update the state with the modified events list
+    setEvents([calendarRef.current.control.events.list]);
+
+};
+
+
 
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
@@ -224,4 +263,3 @@ const Calendar = () => {
 };
 
 export default Calendar;
-
