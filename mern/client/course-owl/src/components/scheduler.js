@@ -27,40 +27,9 @@ const styles = {
 const Calendar = () => {
   const calendarRef = useRef();
 
-  const [calendarConfig, setCalendarConfig] = useState({
-    viewType: "Week",
-    startDate: "2023-10-02",
-    durationBarVisible: true, // Show the duration bar
-    cellDuration: 5, // Set the cell duration to 5 minutes
-    timeRangeSelectedHandling: "Enabled",
-    durationBarWidth: 1000,
-    onTimeRangeSelected: async args => {
-      const dp = calendarRef.current.control;
-      const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
-      dp.clearSelection();
-      if (!modal.result) { return; }
-      dp.events.add({
-        start: args.start,
-        end: args.end,
-        id: DayPilot.guid(),
-        text: modal.result,
-        durationBarWidth: 1000
-      });
-    },
-    eventDeleteHandling: "Update",
-    onEventClick: async args => {
-      const dp = calendarRef.current.control;
-      const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
-      if (!modal.result) { return; }
-      const e = args.e;
-      e.data.text = modal.result;
-      dp.events.update(e);
-    },
-    headerDateFormat: "dddd" // Set the format to display the day of the week
-  });
-
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([]);
 
   const handleFileChange = async () => {
     const filePaths = [
@@ -189,13 +158,44 @@ const Calendar = () => {
     const e = args.e;
     const originButtonId = e.data.originButtonId;
 
-    // Find all events with the same origin button ID and remove them
-    dp.events.all().forEach(event => {
-      if (event.data.originButtonId === originButtonId) {
-        dp.events.remove(event);
-      }
-    });
+    // Remove the event from the state
+    setEvents(prevEvents => prevEvents.filter(event => event.data.originButtonId !== originButtonId));
+    
+    dp.events.remove(e);
   };
+
+  const [calendarConfig, setCalendarConfig] = useState({
+    viewType: "Week",
+    startDate: "2023-10-02",
+    durationBarVisible: true, // Show the duration bar
+    cellDuration: 5, // Set the cell duration to 5 minutes
+    timeRangeSelectedHandling: "Enabled",
+    durationBarWidth: 1000,
+    onTimeRangeSelected: async args => {
+      const dp = calendarRef.current.control;
+      const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
+      dp.clearSelection();
+      if (!modal.result) { return; }
+      dp.events.add({
+        start: args.start,
+        end: args.end,
+        id: DayPilot.guid(),
+        text: modal.result,
+        durationBarWidth: 1000
+      });
+    },
+    eventDeleteHandling: "Update",
+    onEventClick: async args => {
+      const dp = calendarRef.current.control;
+      const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
+      if (!modal.result) { return; }
+      const e = args.e;
+      e.data.text = modal.result;
+      dp.events.update(e);
+    },
+    onEventDelete: handleEventDelete,
+    headerDateFormat: "dddd" // Set the format to display the day of the week
+  });
 
   return (
     <div style={styles.wrap}>
