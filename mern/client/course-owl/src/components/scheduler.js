@@ -192,8 +192,6 @@ const Calendar = () => {
 
     updatedEvents.push([])
 
-
-
     // Update the dp.events.list with the modified events list
     calendarRef.current.control.events.list = updatedEvents;
 
@@ -206,7 +204,7 @@ const Calendar = () => {
 
 const handleSubmitSchedule = () => {
   console.log("Current Course Schedule:");
-  console.log(calendarRef.current.control.events.lists); // Assuming events is the state that holds the course schedule
+  console.log(calendarRef.current.control.events.list); // Assuming events is the state that holds the course schedule
 };
 
   const [calendarConfig, setCalendarConfig] = useState({
