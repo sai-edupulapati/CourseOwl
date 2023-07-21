@@ -20,4 +20,9 @@
     border-radius: 20px;
     background-color: rgb(102, 151, 208);
     color: white;
+    font-family: 'Belanosima', sans-serif;
+}
+
+.messageBottom {
+    font-family: 'Belanosima', sans-serif;
 }
