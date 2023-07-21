@@ -1,0 +1,23 @@
+.message {
+    display: flex;
+    flex-direction: column;
+}
+
+.messageTop {
+    display: flex;
+}
+
+.messageImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.messageText {
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgb(102, 151, 208);
+    color: white;
+}
