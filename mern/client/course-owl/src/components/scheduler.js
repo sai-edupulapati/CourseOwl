@@ -204,7 +204,10 @@ const Calendar = () => {
 
 };
 
-
+const handleSubmitSchedule = () => {
+  console.log("Current Course Schedule:");
+  console.log(calendarRef.current.control.events.lists); // Assuming events is the state that holds the course schedule
+};
 
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
@@ -248,6 +251,7 @@ const Calendar = () => {
           ref={calendarRef}
           durationBarWidth={1590} // Adjust the width value as needed
         />
+        <button onClick={handleSubmitSchedule}>Submit Schedule</button> {/* New button */}
       </div>
       <div style={styles.eventList}>
         <button onClick={handleFileChange}>Load CSV</button>
