@@ -4,7 +4,7 @@ import "./CalendarStyles.css";
 import Papa from 'papaparse';
 import moment from 'moment';
 
-import { useApp } from './RealmApp';
+import { useApp, useRealm } from './RealmApp';
 import * as Realm from "realm-web";
 
 const styles = {
@@ -29,7 +29,8 @@ const styles = {
 
 const Calendar = () => {
   const calendarRef = useRef();
-
+  const app = useApp();
+  const realm = useRealm()
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
@@ -202,9 +203,37 @@ const Calendar = () => {
 
 };
 
-const handleSubmitSchedule = () => {
-  console.log("Current Course Schedule:");
-  console.log(calendarRef.current.control.events.list); // Assuming events is the state that holds the course schedule
+const handleSubmitSchedule = async () => {
+
+  try {
+    ; // Get the Realm instance using the useRealm hook
+    const dp = calendarRef.current.control;
+    console.log(dp.events.list)
+    const courses = dp.events.list.map(event => ({
+      text: event.text,
+      start: event.start,
+      end: event.end,
+      id: event.id,
+      durationBarWidth: "10000000px",
+      originButtonId: event.originButtonId,
+    }));
+
+    console.log(app.currentUser.id)
+
+    // Get the MongoDB collection reference
+    const userSelectionsCollection = realm.db.collection('Schedule_Data');
+
+    // Clear the existing documents in the collection (optional step, remove it if you want to keep the previous entries)
+    await userSelectionsCollection.deleteMany({});
+
+    // Insert the courses into the database
+    await userSelectionsCollection.insertMany(courses);
+
+    console.log("Courses have been saved to MongoDB!");
+
+  } catch (error) {
+    console.error("Error saving courses:", error);
+  }
 };
 
   const [calendarConfig, setCalendarConfig] = useState({

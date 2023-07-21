@@ -4,6 +4,8 @@ import atlasConfig from "../atlasConfig.json";
 
 const { baseUrl } = atlasConfig;
 
+const RealmAppContext = React.createContext();
+
 function createApp(id) {
   return new Realm.App({ id, baseUrl });
 }
@@ -64,3 +66,42 @@ export function useApp() {
   }
   return app;
 }
+
+export const useRealm = () => {
+  const app = useApp();
+  const [realm, setRealm] = React.useState(null);
+
+  React.useEffect(() => {
+    const getRealm = async () => {
+      const user = app.currentUser;
+      if (user) {
+        const mongoClient = user.mongoClient('mongodb-atlas');
+        setRealm(mongoClient.getServiceRealm('Schedule_Data'));
+      }
+    };
+
+    getRealm();
+  }, [app]);
+
+  return realm;
+};
+
+export const RealmAppProvider = ({ appId, children }) => {
+  const app = new Realm.App({ id: appId });
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const loginAnonymousUser = async () => {
+      const anonymousUser = await app.logIn(Realm.Credentials.anonymous());
+      setUser(anonymousUser);
+    };
+
+    loginAnonymousUser();
+  }, [app]);
+
+  return (
+    <RealmAppContext.Provider value={app}>
+      {children}
+    </RealmAppContext.Provider>
+  );
+};
