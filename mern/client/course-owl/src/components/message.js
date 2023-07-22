@@ -17,10 +17,8 @@ export default function Message() {
         <div className="message">
             <div className="messageTop">
                 <Stack direction={'row'} alignItems={'center'}>
-                    <ThemeProvider theme={theme}>
                         <img src={logo} className='messageImage'></img>
                         <p className="messageText">Hello this is a message</p>
-                    </ThemeProvider>
                 </Stack>
             </div>
             <div className="messageBottom">1 hour ago</div>
