@@ -297,5 +297,3 @@ const handleSubmitSchedule = async () => {
 };
 
 export default Calendar;
-
-// add a submit button to get the dp.events.list log to see what all has been selected by the user
