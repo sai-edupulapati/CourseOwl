@@ -24,8 +24,6 @@
     background-color: #e2e2e2;
   }
 
-/* outer duration bar box, uses full height, light blue */
 .calendar_default_event_bar { top: 0px; bottom: 0px; left: 0px; width: 0px; background-color: #430405; }
 
-/* inner duration bar box, displays the duration, dark blue */
 .calendar_default_event_bar_inner { position: absolute; width: 20px; background-color: #ee330e; }
