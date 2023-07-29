@@ -213,12 +213,38 @@ const collection = useCollection({
   collection: "User_Selections" // Replace with your actual collection name
 });
 
+const app = useApp(); 
+
 const handleSubmitSchedule = async () => {
   try {
-    // Data you want to insert into the collection
+    
+    // Assuming you have access to the Realm app instance via useApp() hook
+
+    // Check if the user is logged in
+    if (!app.currentUser) {
+      console.error('User not logged in.');
+      return;
+    }
+
+    // Get the current user's ID
+    const currentUserId = app.currentUser.id;
+    console.log(calendarRef.current.control.events.list)
+
+    // Retrieve the event data from the calendar
+    const eventData = calendarRef.current.control.events.list.map(event => {
+      return {
+        start: event.start,
+        end: event.end,
+        text: event.text,
+        durationBarWidth: "10000000px",
+        originButtonId: event.originButtonId,
+      };
+    });
+
+    // Combine the user's ID with the event data
     const data = {
-      key1: "value1",
-      key2: "value2",
+      userId: currentUserId,
+      events: eventData,
       // Add other data fields here as needed
     };
 
