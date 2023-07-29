@@ -4,8 +4,13 @@ import "./CalendarStyles.css";
 import Papa from 'papaparse';
 import moment from 'moment';
 
-import { useApp, useRealm } from './RealmApp';
+import { useApp } from './RealmApp';
 import * as Realm from "realm-web";
+import { writeToMongoDB } from './RealmApp';
+
+import { useCollection } from "/Users/kushagragovil/Documents/GitHub/CourseOwl/mern/client/course-owl/src/hooks/useCollection.jsx";
+
+
 
 const styles = {
   wrap: {
@@ -29,8 +34,7 @@ const styles = {
 
 const Calendar = () => {
   const calendarRef = useRef();
-  const app = useApp();
-  const realm = useRealm()
+
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
@@ -203,36 +207,27 @@ const Calendar = () => {
 
 };
 
+const collection = useCollection({
+  cluster: "mongodb-atlas", // The cluster name from your atlasConfig
+  db: "Schedule_Data", // Replace with your actual database name
+  collection: "User_Selections" // Replace with your actual collection name
+});
+
 const handleSubmitSchedule = async () => {
-
   try {
-    ; // Get the Realm instance using the useRealm hook
-    const dp = calendarRef.current.control;
-    console.log(dp.events.list)
-    const courses = dp.events.list.map(event => ({
-      text: event.text,
-      start: event.start,
-      end: event.end,
-      id: event.id,
-      durationBarWidth: "10000000px",
-      originButtonId: event.originButtonId,
-    }));
+    // Data you want to insert into the collection
+    const data = {
+      key1: "value1",
+      key2: "value2",
+      // Add other data fields here as needed
+    };
 
-    console.log(app.currentUser.id)
+    // Insert the data into the collection
+    await collection.insertOne(data);
 
-    // Get the MongoDB collection reference
-    const userSelectionsCollection = realm.db.collection('Schedule_Data');
-
-    // Clear the existing documents in the collection (optional step, remove it if you want to keep the previous entries)
-    await userSelectionsCollection.deleteMany({});
-
-    // Insert the courses into the database
-    await userSelectionsCollection.insertMany(courses);
-
-    console.log("Courses have been saved to MongoDB!");
-
+    console.log("Data inserted successfully!");
   } catch (error) {
-    console.error("Error saving courses:", error);
+    console.error("Error writing to MongoDB:", error);
   }
 };
 
@@ -297,3 +292,5 @@ const handleSubmitSchedule = async () => {
 };
 
 export default Calendar;
+
+// add a submit button to get the dp.events.list log to see what all has been selected by the user
