@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import "./CalendarStyles.css";
 import Papa from 'papaparse';
@@ -35,6 +35,8 @@ const styles = {
 const Calendar = () => {
   const calendarRef = useRef();
 
+
+
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
@@ -52,7 +54,7 @@ const Calendar = () => {
       T: "2023-10-03",
       W: "2023-10-04",
       Th: "2023-10-05",
-      F: "2023-10-05",
+      F: "2023-10-06",
     };
   
     const promises = filePaths.map(filePath => {
@@ -215,6 +217,32 @@ const collection = useCollection({
 
 const app = useApp(); 
 
+const fetchEventsForUser = async () => {
+  try {
+    // Check if the user is logged in
+    if (!app.currentUser) {
+      console.error('User not logged in.');
+      return;
+    }
+
+    // Get the current user's ID
+    const currentUserId = app.currentUser.id;
+
+    // Query the database to fetch events associated with the current user
+    const userEvents = await collection.find({ userId: currentUserId });
+
+    // Update the events state with the fetched events
+    setEvents(userEvents[0]?.events || []);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
+};
+
+useEffect(() => {
+  fetchEventsForUser();
+}, []);
+
+
 const handleSubmitSchedule = async () => {
   try {
     
@@ -257,6 +285,7 @@ const handleSubmitSchedule = async () => {
   }
 };
 
+
   const [calendarConfig, setCalendarConfig] = useState({
     viewType: "Week",
     startDate: "2023-10-02",
@@ -298,6 +327,7 @@ const handleSubmitSchedule = async () => {
           {...calendarConfig}
           ref={calendarRef}
           durationBarWidth={1590} // Adjust the width value as needed
+          events={events}
         />
         <button onClick={handleSubmitSchedule}>Submit Schedule</button> {/* New button */}
       </div>
@@ -318,5 +348,3 @@ const handleSubmitSchedule = async () => {
 };
 
 export default Calendar;
-
-// add a submit button to get the dp.events.list log to see what all has been selected by the user
