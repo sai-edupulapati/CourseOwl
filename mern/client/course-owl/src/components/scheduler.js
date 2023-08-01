@@ -6,7 +6,6 @@ import moment from 'moment';
 
 import { useApp } from './RealmApp';
 import * as Realm from "realm-web";
-import { writeToMongoDB } from './RealmApp';
 
 import { useCollection } from "/Users/kushagragovil/Documents/GitHub/CourseOwl/mern/client/course-owl/src/hooks/useCollection.jsx";
 
@@ -176,9 +175,6 @@ const Calendar = () => {
     ]);
   };
   
-
-
-
   const handleEventDelete = async args => {
 
     const dp = calendarRef.current.control;
@@ -228,6 +224,8 @@ const fetchEventsForUser = async () => {
     // Get the current user's ID
     const currentUserId = app.currentUser.id;
 
+    console.log("came here")
+
     // Query the database to fetch events associated with the current user
     const userEvents = await collection.find({ userId: currentUserId });
 
@@ -263,6 +261,7 @@ const handleSubmitSchedule = async () => {
       return {
         start: event.start,
         end: event.end,
+        id: event.id,
         text: event.text,
         durationBarWidth: "10000000px",
         originButtonId: event.originButtonId,
@@ -327,7 +326,7 @@ const handleSubmitSchedule = async () => {
           {...calendarConfig}
           ref={calendarRef}
           durationBarWidth={1590} // Adjust the width value as needed
-          events={events}
+          //events={events}
         />
         <button onClick={handleSubmitSchedule}>Submit Schedule</button> {/* New button */}
       </div>
@@ -346,5 +345,8 @@ const handleSubmitSchedule = async () => {
     </div>
   );
 };
+
+// events line is the problem. Make a button asking you have previous schedule saved. Ask if you want to use
+// If yes, then fetch and update. If no, delete record in database and make new.
 
 export default Calendar;
