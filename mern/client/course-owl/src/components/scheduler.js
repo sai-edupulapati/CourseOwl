@@ -243,8 +243,6 @@ useEffect(() => {
 
 const handleSubmitSchedule = async () => {
   try {
-    
-    // Assuming you have access to the Realm app instance via useApp() hook
 
     // Check if the user is logged in
     if (!app.currentUser) {
