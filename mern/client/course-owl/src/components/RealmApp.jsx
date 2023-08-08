@@ -35,8 +35,8 @@ export function AppProvider({ appId, children }) {
     } catch (err) {
       console.error(err);
     }
-    // In this App there will only be one logged in user at a time, so
-    // the new current user will be null. If you add support for
+    // In this App there will only be one logged in user at a time,
+    // so the new current user will be null. If you add support for
     // multiple simultaneous user logins, this updates to another logged
     // in account if one exists.
     setCurrentUser(null);
