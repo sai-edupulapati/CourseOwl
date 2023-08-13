@@ -75,6 +75,8 @@ const Calendar = () => {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
 
+
+
   ////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -191,13 +193,14 @@ const Calendar = () => {
     fetchEvents();
   }, []);
 
+
   useEffect(() => {
     if (selectedAction === "useExisting") {
       // Handle "Use Existing Schedule" action
-      // For example, load the existing events into the calendar
+
     } else if (selectedAction === "buildNew") {
       // Handle "Build a New Schedule" action
-      // For example, reset the calendar or navigate to a new route
+
     }
   }, [selectedAction]);
   
@@ -372,6 +375,46 @@ const handleSubmitSchedule = async () => {
     headerDateFormat: "dddd" // Set the format to display the day of the week
   });
 
+  const handleUseExistingSchedule = () => {
+    // Handle "Use Existing Schedule" action
+
+    if (fetchedEvents.length > 0 && fetchedEvents[0].events) {
+      const eventsArray = fetchedEvents[0].events;
+  
+      const dp = calendarRef.current.control;
+  
+      eventsArray.forEach(event => {
+        const start = moment(event.start, 'YYYY-MM-DDTHH:mm:ss');
+        const end = moment(event.end, 'YYYY-MM-DDTHH:mm:ss');
+  
+        dp.events.add({
+          start: start.format('YYYY-MM-DDTHH:mm:ss'),
+          end: end.format('YYYY-MM-DDTHH:mm:ss'),
+          id: event.id,
+          text: event.text,
+          durationBarWidth: "10000000px",
+          // Add other event properties as needed
+        });
+      });
+    }
+
+    // Hide the overlay
+    setOverlayVisible(false);
+  };
+  
+  const handleBuildNewSchedule = () => {
+    // Handle "Build a New Schedule" action
+  
+    // Hide the overlay
+
+
+
+    setOverlayVisible(false);
+  
+    // Rest of your logic for building a new schedule, including deleting the database record
+  };
+  
+
   return (
     <div style={styles.wrap}>
       <div style={styles.main}>
@@ -402,8 +445,8 @@ const handleSubmitSchedule = async () => {
         <div style={overlayStyles.overlayContent}>
           <h2>Existing Schedule Found</h2>
           <p>You have an existing schedule. What would you like to do?</p>
-          <button onClick={() => setSelectedAction("useExisting")}>Use Existing Schedule</button>
-          <button onClick={() => setSelectedAction("buildNew")}>Build a New Schedule</button>
+          <button onClick={() => handleUseExistingSchedule()}>Use Existing Schedule</button>
+          <button onClick={() => handleBuildNewSchedule()}>Build a New Schedule</button>
         </div>
       </div>
     )}
