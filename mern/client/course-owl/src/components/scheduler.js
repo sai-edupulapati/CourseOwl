@@ -336,6 +336,7 @@ const handleSubmitSchedule = async () => {
           //events={events}
         />
         <button onClick={handleSubmitSchedule}>Submit Schedule</button> {/* New button */}
+        <button onClick={fetchEvents}>Fetch Events</button>
       </div>
       <div style={styles.eventList}>
         <button onClick={handleFileChange}>Load CSV</button>
