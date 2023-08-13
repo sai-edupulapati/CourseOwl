@@ -402,17 +402,34 @@ const handleSubmitSchedule = async () => {
     setOverlayVisible(false);
   };
   
-  const handleBuildNewSchedule = () => {
-    // Handle "Build a New Schedule" action
+  const handleBuildNewSchedule = async () => {
+    try {
+      // Assuming you have access to the Realm app instance via useApp() hook
+      if (!app.currentUser) {
+        console.error('User not logged in.');
+        return;
+      }
   
-    // Hide the overlay
-
-
-
-    setOverlayVisible(false);
+      // Get the current user's ID
+      const currentUserId = app.currentUser.id;
   
-    // Rest of your logic for building a new schedule, including deleting the database record
+      // Delete the fetched record from the database
+      await collection.deleteOne({ userId: currentUserId });
+  
+      console.log("Record deleted successfully!");
+  
+      // Hide the overlay
+      setOverlayVisible(false);
+  
+      // Clear the events from the DayPilot Calendar (if needed)
+      const dp = calendarRef.current.control;
+      dp.events.list = [];
+      dp.update();
+    } catch (error) {
+      console.error("Error deleting record:", error);
+    }
   };
+  
   
 
   return (
