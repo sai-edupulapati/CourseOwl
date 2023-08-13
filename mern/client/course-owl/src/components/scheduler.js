@@ -9,6 +9,26 @@ import * as Realm from "realm-web";
 
 import { useCollection } from "/Users/kushagragovil/Documents/GitHub/CourseOwl/mern/client/course-owl/src/hooks/useCollection.jsx";
 
+const overlayStyles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(0, 0, 0, 0.6)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  overlayContent: {
+    background: "white",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "center",
+  },
+};
 
 
 const styles = {
@@ -28,7 +48,16 @@ const styles = {
     display: "block",
     width: "100%",
     marginBottom: "5px"
-  }
+  },
+  overlayBackground: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backdropFilter: "blur(5px)",
+    zIndex: 999,
+  },
 };
 
 const Calendar = () => {
@@ -42,6 +71,10 @@ const Calendar = () => {
 
   ////////////////////////////////////////////////////////////////////////////////////
   const [fetchedEvents, setFetchedEvents] = useState([]);
+
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [selectedAction, setSelectedAction] = useState("");
+
   ////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -140,10 +173,12 @@ const Calendar = () => {
   
       const currentUserId = app.currentUser.id;
   
-      // Fetch events from the collection based on the current user's ID
       const response = await collection.find({ userId: currentUserId });
   
-      // Set the fetched events in state
+      if (response.length > 0) {
+        setOverlayVisible(true);
+      }
+  
       setFetchedEvents(response);
       console.log("Fetched events:", response);
     } catch (error) {
@@ -151,9 +186,21 @@ const Calendar = () => {
     }
   };
   
+  
   useEffect(() => {
-    console.log("Fetched events:", fetchedEvents);
-  }, [fetchedEvents]);
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    if (selectedAction === "useExisting") {
+      // Handle "Use Existing Schedule" action
+      // For example, load the existing events into the calendar
+    } else if (selectedAction === "buildNew") {
+      // Handle "Build a New Schedule" action
+      // For example, reset the calendar or navigate to a new route
+    }
+  }, [selectedAction]);
+  
   
   //////////////////////////////////////////////////////////////////////////////////////
 
@@ -350,6 +397,17 @@ const handleSubmitSchedule = async () => {
           )
         )}
       </div>
+      {overlayVisible && (
+      <div style={overlayStyles.overlay}>
+        <div style={overlayStyles.overlayContent}>
+          <h2>Existing Schedule Found</h2>
+          <p>You have an existing schedule. What would you like to do?</p>
+          <button onClick={() => setSelectedAction("useExisting")}>Use Existing Schedule</button>
+          <button onClick={() => setSelectedAction("buildNew")}>Build a New Schedule</button>
+        </div>
+      </div>
+    )}
+    <div style={{ ...(overlayVisible && { ...styles.overlayBackground }) }}></div>
     </div>
   );
 };
