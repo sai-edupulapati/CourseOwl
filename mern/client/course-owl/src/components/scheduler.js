@@ -40,6 +40,11 @@ const Calendar = () => {
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
 
+  ////////////////////////////////////////////////////////////////////////////////////
+  const [fetchedEvents, setFetchedEvents] = useState([]);
+  ////////////////////////////////////////////////////////////////////////////////////
+
+
   const handleFileChange = async () => {
     const filePaths = [
       "/events.csv", // Assuming the file is in the public directory
@@ -123,7 +128,34 @@ const Calendar = () => {
       setLoading(false);
     }
   };
+
+  ////////////////////////////////////////////////////////////////////////////////////
+
+  const fetchEvents = async () => {
+    try {
+      if (!app.currentUser) {
+        console.error('User not logged in.');
+        return;
+      }
   
+      const currentUserId = app.currentUser.id;
+  
+      // Fetch events from the collection based on the current user's ID
+      const response = await collection.find({ userId: currentUserId });
+  
+      // Set the fetched events in state
+      setFetchedEvents(response);
+      console.log("Fetched events:", response);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
+  
+  useEffect(() => {
+    console.log("Fetched events:", fetchedEvents);
+  }, [fetchedEvents]);
+  
+  //////////////////////////////////////////////////////////////////////////////////////
 
   const handleEventButtonClick = event => {
     const dp = calendarRef.current.control;
@@ -213,36 +245,13 @@ const collection = useCollection({
 
 const app = useApp(); 
 
-const fetchEventsForUser = async () => {
-  try {
-    // Check if the user is logged in
-    if (!app.currentUser) {
-      console.error('User not logged in.');
-      return;
-    }
 
-    // Get the current user's ID
-    const currentUserId = app.currentUser.id;
-
-    console.log("came here")
-
-    // Query the database to fetch events associated with the current user
-    const userEvents = await collection.find({ userId: currentUserId });
-
-    // Update the events state with the fetched events
-    setEvents(userEvents[0]?.events || []);
-  } catch (error) {
-    console.error("Error fetching events:", error);
-  }
-};
-
-useEffect(() => {
-  fetchEventsForUser();
-}, []);
 
 
 const handleSubmitSchedule = async () => {
   try {
+    
+    // Assuming you have access to the Realm app instance via useApp() hook
 
     // Check if the user is logged in
     if (!app.currentUser) {
