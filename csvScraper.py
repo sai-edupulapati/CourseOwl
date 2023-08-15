@@ -1,29 +1,20 @@
+import os
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import shutil
-import time
-import os
 
 import shutil
-
-import time
-
-import requests
-import io
-import subprocess
-
 import pandas as pd
+import time
 
 from webdriver_manager.chrome import ChromeDriverManager
 driver = webdriver.Chrome()
 
 from pymongo import MongoClient
 
-# Set up MongoDB Atlas connection
-# Replace placeholders with your MongoDB Atlas connection details
 mongo_uri = "mongodb+srv://courseowl241:kmwouENhxx3iJPUi@cluster0.jtihfjn.mongodb.net/"
 client = MongoClient(mongo_uri)
 db = client["Schedule_Data"]
@@ -49,6 +40,7 @@ csv_path = '/Users/kushagragovil/Desktop'
 #driver = webdriver.Chrome(service=service, options=chrome_options)
 
 try:
+
     # Open the webpage
     driver.get(url)
 
@@ -95,8 +87,6 @@ try:
     # Click the "Export" button
     export_button.click()
 
-    time.sleep(15)
-
     # Wait for the "Export CSV" button to be clickable
     export_csv_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '//td[contains(text(), "Export CSV")]'))
@@ -107,23 +97,33 @@ try:
     # Click the "Export CSV" button
     export_csv_button.click()
 
+    time.sleep(15)
+    source = '/Users/kushagragovil/Downloads/events.csv'
 
-    # Get the current URL (CSV download link)
-    csv_url = driver.current_url
+    # Read the CSV file
+    df = pd.read_csv(source)
 
-    print("hoho")
+    # MongoDB Atlas setup
+    mongo_uri = "mongodb+srv://courseowl241:kmwouENhxx3iJPUi@cluster0.jtihfjn.mongodb.net/test?retryWrites=true&w=majority"
+    client = MongoClient(mongo_uri)
+    db = client["Schedule_Data"]
+    collection = db["Course_Data"]
 
+    # Convert the DataFrame to a list of dictionaries
+    data = df.to_dict(orient='records')
 
-    # Use subprocess to call the mongoimport command
-    subprocess.run([
-        'mongoimport',
-        '--uri', mongo_uri,
-        '--collection', 'Course_Data',  # Collection name in MongoDB
-        '--type', 'csv',
-        '--file', csv_url,
-        '--headerline'
-    ])
+    # Upload data to MongoDB Atlas
+    collection.insert_many(data)
+
+    # Delete the local CSV file
+    os.remove(source)
+
+    print('CSV data uploaded to MongoDB Atlas and local file deleted successfully!')
     
+
+    print("ho")
+
+    print('CSV file downloaded successfully!')
 
 finally:
     # Quit the browser
