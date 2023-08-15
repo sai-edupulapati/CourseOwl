@@ -1,7 +1,8 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Card, List, ListItem, ListItemButton, ListItemText, TextField } from "@mui/material";
 import { useCollection } from "../hooks/useCollection";
-import React from 'react'
+import React, { useRef } from 'react'
 import { Button } from "@mui/base";
+import { FixedSizeList } from 'react-window';
 
 
 
@@ -11,6 +12,48 @@ const  Review=()=>{
   const [selectedOption, setSelectedOption] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
   const [rev, setRev] = React.useState('');
+  // const ref = useRef(null);
+  function generate(element) {
+    return [0, 1, 2].map((value) =>
+      React.cloneElement(element, {
+        key: value,
+      }),
+    );
+  }
+  function renderRowWithAdditional(reviews) {
+    return function renderRow({ index, style }) {
+      const review = reviews[index]; // Get the review at the given index
+      return (
+        <ListItem style={style} key={index} component="div" disablePadding>
+          <ListItemButton>
+            <ListItemText primary={review} />
+          </ListItemButton>
+        </ListItem>
+      );
+    };
+  }
+  
+  const ShowReviews = () => {
+    if ( selectedOption == undefined || selectedOption==null || selectedOption["Reviews"] == null || selectedOption["Reviews"] == undefined) {
+      return(<></>)
+    } 
+    console.log("showing reviews")
+    const reviewText = selectedOption["Reviews"] 
+   console.log(reviewText)
+    const number = reviewText.length
+    return (
+      <FixedSizeList
+        height={400}
+        width={'100%'}
+        itemSize={50}
+        itemCount={number}
+        overscanCount={5}
+      >
+        {renderRowWithAdditional(reviewText)}
+      </FixedSizeList>
+   
+    )
+  }
      const handleAutocompleteChange = (event, value) => {
          setSelectedOption(value);
        };
@@ -21,38 +64,33 @@ const  Review=()=>{
        
          setAllInfoList(needed)
      }
-  function AddReview() {
-   
-    console.log("rev before ",rev)
-      return(
-      <>
-      <div>
-      <TextField 
-            style={{paddingTop:100}}
-            id="outlined-multiline-static"
-            multiline
-            rows={4}
-            placeholder="Write a review"
-            value={rev}
-          onChange={(event) => {
-            setRev(event.target.value);
-          }}
-          />
-          </div>
-      <Button
-    
-      onClick={() => {
-          handleAdd()
-        }}
-      >Add a review</Button>
-      </>)
-  }
-  async function handleAdd(props) {
+  
+  async function handleAdd() {
     console.log("rev" , rev)
       if (inputValue == null || inputValue==="") {
           console.log("Enter name")
       } else {
-          await collection.findOneAndReplace({Name : selectedOption.Name},({Name : selectedOption.Name},{" Department" : selectedOption[" Department"]},{" Email" : selectedOption[" Email"]},{" Photo" : selectedOption[" Photo"]},{Review:rev}))
+        console.log("id",selectedOption._id)
+          const filter = {_id : selectedOption._id}
+          const options = { upsert: false };
+          console.log("review",selectedOption["Reviews"])
+          const temp = {
+            _id : selectedOption._id,
+            Name : selectedOption.Name,
+            " Department" : selectedOption[" Department"],
+            " Email" : selectedOption[" Email"],
+            " Photo" : selectedOption[" Photo"],
+            Reviews: [...(selectedOption["Reviews"] || []), rev]
+          }
+         
+          const update = {
+            $set: temp
+          }
+          const result2 = await collection.updateOne(filter,update,options)
+          setSelectedOption(temp)
+           console.log("end",result2)
+           setRev('')
+
       }
   }
   var photo
@@ -90,9 +128,11 @@ const  Review=()=>{
     inputValue={inputValue}
     onInputChange={(event, newInputValue) => {
       setInputValue(newInputValue);
+      console.log("now")
+     
     }}
       value={selectedOption} 
-      onChange={handleAutocompleteChange}
+       onChange={handleAutocompleteChange}
     {...defaultProps}
   disablePortal
   id="combo-box-demo"
@@ -103,9 +143,29 @@ const  Review=()=>{
   <div>{title}</div>
   <div></div>
   <div>{email}</div>
-  <AddReview></AddReview>
-  </>
+  
+  <div>
+      <TextField 
+            // ref={ref}
+            style={{paddingTop:100}}
+            id="outlined-multiline-static"
+            multiline
+            rows={4}
+            placeholder="Write a review"
+            value={rev}
+          onChange={(event) => {
+            setRev(event.target.value);
+          }}
+          
+          />
+          </div>
+  <Button
     
+      onClick={handleAdd}
+      >Add a review</Button>
+  {<ShowReviews></ShowReviews> }
+  </>
+  
 
     )  
 }
