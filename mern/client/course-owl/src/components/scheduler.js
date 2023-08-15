@@ -308,6 +308,19 @@ const handleSubmitSchedule = async () => {
       console.error('User not logged in.');
       return;
     }
+    
+    try{
+      // Get the current user's ID
+      const currentUserId = app.currentUser.id;
+
+      // Delete the fetched record from the database
+      collection.deleteOne({ userId: currentUserId });
+  
+      console.log("Record deleted successfully!");
+
+    } catch (error) {
+      console.error("Error deleting record:", error);
+    }
 
     // Get the current user's ID
     const currentUserId = app.currentUser.id;
@@ -396,6 +409,8 @@ const handleSubmitSchedule = async () => {
           // Add other event properties as needed
         });
       });
+
+
     }
 
     // Hide the overlay
@@ -471,8 +486,5 @@ const handleSubmitSchedule = async () => {
     </div>
   );
 };
-
-// events line is the problem. Make a button asking you have previous schedule saved. Ask if you want to use
-// If yes, then fetch and update. If no, delete record in database and make new.
 
 export default Calendar;
