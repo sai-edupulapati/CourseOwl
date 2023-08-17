@@ -12,6 +12,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 # Initialize the GeckoDriver (Firefox driver)
 driver = webdriver.Firefox()
+#driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
 # MongoDB setup
 mongo_uri = "mongodb+srv://courseowl241:kmwouENhxx3iJPUi@cluster0.jtihfjn.mongodb.net/"
@@ -80,17 +81,40 @@ def process_url(url):
     
     finally:
         # Quit the browser
-        driver.quit()
+        #driver.quit()
+        print()
+
+
+# Function to clear old data from the database
+def clear_database():
+    collection.delete_many({})
 
 # List of URLs to process
 urls = [
     'https://timetable.mypurdue.purdue.edu/Timetabling/gwt.jsp?page=classes#name=AAE&term=Fall2023PWL',
-    'https://timetable.mypurdue.purdue.edu/Timetabling/gwt.jsp?page=classes#name=CS&term=Fall2023PWL',  # Replace with the second URL
+    'https://timetable.mypurdue.purdue.edu/Timetabling/gwt.jsp?page=classes#name=CS&term=Fall2023PWL'  # Replace with the second URL
     # Replace with the third URL
 ]
 
-for url in urls:
-    process_url(url)
-    print(f'Processing of URL {url} completed')
+try:
 
-print('All URLs processed successfully!')
+    while True:
+
+        # Process URLs and clear old data
+        clear_database()
+        for url in urls:
+            process_url(url)
+            print(f'Processing of URL {url} completed')
+        
+        # Sleep for 2 minutes
+        time.sleep(120)
+
+except KeyboardInterrupt:
+    pass
+
+finally:
+    # Quit the browser
+    driver.quit()
+
+print('Script completed successfully!')
+#driver.quit()
