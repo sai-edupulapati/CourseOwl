@@ -4,14 +4,14 @@ import shutil
 import pandas as pd
 from pymongo import MongoClient
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 
-# Initialize the ChromeDriver
-driver = webdriver.Chrome()
+# Initialize the GeckoDriver (Firefox driver)
+driver = webdriver.Firefox()
 
 # MongoDB setup
 mongo_uri = "mongodb+srv://courseowl241:kmwouENhxx3iJPUi@cluster0.jtihfjn.mongodb.net/"
@@ -22,7 +22,8 @@ collection = db["Course_Data"]
 # Function to process a URL
 def process_url(url):
     try:
-        # Open the webpage
+    
+         # Open the webpage
         driver.get(url)
         
         time.sleep(15)
@@ -84,8 +85,8 @@ def process_url(url):
 # List of URLs to process
 urls = [
     'https://timetable.mypurdue.purdue.edu/Timetabling/gwt.jsp?page=classes#name=AAE&term=Fall2023PWL',
-    'https://example.com',  # Replace with the second URL
-    'https://example.net'   # Replace with the third URL
+    'https://timetable.mypurdue.purdue.edu/Timetabling/gwt.jsp?page=classes#name=CS&term=Fall2023PWL',  # Replace with the second URL
+    # Replace with the third URL
 ]
 
 for url in urls:
