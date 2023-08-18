@@ -12,6 +12,7 @@ import NavBar from './components/navbar';
 import Scheduler from './components/scheduler';
 import Grades from './components/grades';
 import Review from './components/review';
+import Reviews from './components/reviews';
 const { appId } = atlasConfig;
 
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/navbar" element={<NavBar />} />
         <Route path='/grades' element={<Grades />} />
         <Route path='review' element = {<Review />} />
+        <Route path='reviews' element = {<Reviews />} />
         </Routes>
     </BrowserRouter>
   );

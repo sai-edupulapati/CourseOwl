@@ -1,28 +1,18 @@
-import { Autocomplete, Card, List, ListItem, ListItemButton, ListItemText, TextField } from "@mui/material";
+import { Autocomplete, ListItem, ListItemButton, ListItemText, TextField } from "@mui/material";
 import { useCollection } from "../hooks/useCollection";
-import React, { useRef } from 'react'
+import React from 'react'
 import { Button } from "@mui/base";
 import { FixedSizeList } from 'react-window';
-
-
-
 
 const  Review=()=>{
   const [allInfoList, setAllInfoList] = React.useState([])
   const [selectedOption, setSelectedOption] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
   const [rev, setRev] = React.useState('');
-  // const ref = useRef(null);
-  function generate(element) {
-    return [0, 1, 2].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
+ 
   function renderRowWithAdditional(reviews) {
     return function renderRow({ index, style }) {
-      const review = reviews[index]; // Get the review at the given index
+      const review = reviews[index]
       return (
         <ListItem style={style} key={index} component="div" disablePadding>
           <ListItemButton>
@@ -146,7 +136,6 @@ const  Review=()=>{
   
   <div>
       <TextField 
-            // ref={ref}
             style={{paddingTop:100}}
             id="outlined-multiline-static"
             multiline
