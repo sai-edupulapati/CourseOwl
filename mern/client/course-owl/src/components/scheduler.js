@@ -61,9 +61,8 @@ const styles = {
 };
 
 const Calendar = () => {
+  
   const calendarRef = useRef();
-
-
 
   const [eventButtons, setEventButtons] = useState([]);
   const [loading, setLoading] = useState(false);
