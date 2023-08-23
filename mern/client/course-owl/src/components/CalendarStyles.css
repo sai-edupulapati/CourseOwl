@@ -1,28 +1,69 @@
-.calendar_default_event_inner {
-    background: rgba(254, 254, 254, 0.5); /* Use RGBA value with alpha set to 0.5 for 50% transparency */
-    color: rgb(10, 1, 1);
-    border: none;
-    border-radius: 5px;
-    font-size: 10pt;
-    padding: 7px 30px; /* Adjust the top (20px) and left (40px) padding as per your requirement */
-}
-
-.eventButton {
-    display: block;
-    width: 100%;
-    margin-bottom: 5px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+/* Calendar container */
+.calendar_container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
   }
   
-  .eventButton:hover {
-    background-color: #e2e2e2;
+  /* Calendar day header */
+  .calendar_day_header {
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
   }
-
-.calendar_default_event_bar { top: 0px; bottom: 0px; left: 0px; width: 0px; background-color: #430405; }
-
-.calendar_default_event_bar_inner { position: absolute; width: 20px; background-color: #ee330e; }
+  
+  /* Calendar day cell */
+  .calendar_day_cell {
+    position: relative;
+    min-height: 100px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Event button */
+  .event_button {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #f8f8f8;
+    border: none;
+    border-radius: 4px;
+    color: #333;
+    font-size: 14px;
+    text-align: left;
+  }
+  
+  .event_button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Duration bar */
+  .duration_bar {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 4px;
+    height: 80%;
+    background-color: #ee330e;
+    border-radius: 2px;
+  }
+  
+  /* Today's date indicator */
+  .today_indicator {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background-color: #00bfff;
+    border-radius: 50%;
+  }
+  
