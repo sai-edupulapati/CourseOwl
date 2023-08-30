@@ -75,14 +75,12 @@ const Reviews = () => {
         <Box>
             <Paper>
                 <NavBar />
-                
                 <ThemeProvider theme={theme}>
                     <Stack paddingTop={10} alignItems="center">
                         <Typography component="div" sx={{ flexGrow: 1}} align='center' fontSize={45} fontWeight={'bold'}>
                             Review your Professors !
                         </Typography>
                         <Autocomplete
-                            
                             inputValue={inputValue}
                             onInputChange={(event, newInputValue) => {
                                 setInputValue(newInputValue);
@@ -97,6 +95,7 @@ const Reviews = () => {
                             renderInput={(params) => 
                                 <TextField {...params}
                                     placeholder= "Professor Name" 
+                                    ref={params.InputProps.ref}
                                     style={{paddingTop:20}}
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
@@ -104,7 +103,8 @@ const Reviews = () => {
                                         },
                                     }}
                                     InputProps={{
-                                        style:{fontSize:30},
+                                        ...params.inputProps,
+                                        style:{fontSize:10},
                                         startAdornment: (
                                             <InputAdornment position="start">
                                                 <PersonIcon/>
@@ -112,10 +112,12 @@ const Reviews = () => {
                                         ),
                                     }}
                                 />
+                                   
                             } 
                         />
                     </Stack>
                 </ThemeProvider> 
+                
             </Paper>
         </Box>
         }
